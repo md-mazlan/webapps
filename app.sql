@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2025 at 11:23 AM
+-- Generation Time: Jul 25, 2025 at 01:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -247,9 +247,9 @@ INSERT INTO `likes` (`id`, `user_id`, `content_id`, `created_at`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
+  `nric` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `nric` varchar(50) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -258,9 +258,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `nric`, `password`, `created_at`) VALUES
-(1, 'user1', 'user@live.com', NULL, '$2y$10$SEnulAx6f6yWBw5wHzlC4eAv.01opBrbJgRBQI2zid4p..9QErTf6', '2025-07-24 09:07:20'),
-(2, 'user2', 'mazlan97@live.com', NULL, '$2y$10$YIw0umAxfE5TmYF2sjiWieTB8eq.ZikBOkTApE4s7M0bJx8V8gNry', '2025-07-24 09:15:34');
+INSERT INTO `users` (`id`, `nric`, `email`, `username`, `password`, `created_at`) VALUES
+(1, '971009126139', 'mazlan97@live.com', 'mazlan', '$2y$10$FViyRRCuK8ZqC5PHAig.Se91YAiA50nXp4QDtlN.kU27bD2al4S5q', '2025-07-24 18:57:44');
 
 -- --------------------------------------------------------
 
@@ -273,9 +272,11 @@ CREATE TABLE `user_employment` (
   `user_id` int(11) NOT NULL,
   `company` varchar(255) DEFAULT NULL,
   `job_title` varchar(255) DEFAULT NULL,
+  `department` varchar(255) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `is_current` tinyint(1) DEFAULT 0,
+  `responsibilities` text DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -289,7 +290,16 @@ CREATE TABLE `user_profiles` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `full_name` varchar(255) DEFAULT NULL,
-  `bio` text DEFAULT NULL,
+  `gender` enum('m','f') DEFAULT NULL,
+  `ethnic` varchar(100) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `address1` varchar(255) DEFAULT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `area` varchar(100) DEFAULT NULL,
+  `postal_code` varchar(20) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
   `profile_pic_url` varchar(2083) DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -400,9 +410,9 @@ ALTER TABLE `likes`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `nric` (`nric`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `nric` (`nric`);
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indexes for table `user_employment`
@@ -493,7 +503,7 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_employment`

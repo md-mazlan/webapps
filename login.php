@@ -1,18 +1,12 @@
 <?php
-// This is the auth check for PUBLIC USERS.
-// We need to create a separate auth check file for them.
-// For now, we'll do the check directly here.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// If a user is already logged in, redirect them to the homepage.
 if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
     header('Location: index.php');
     exit;
 }
-
-// A full implementation would also check for a user's "Remember Me" cookie here.
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,162 +17,237 @@ if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
     <title>Login & Registration</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover-color: #1d4ed8;
-            --success-color: #16a34a;
-            --success-hover-color: #15803d;
-            --bg-color: #f3f4f6;
-            --form-bg-color: #ffffff;
-            --text-color: #1f2937;
-            --label-color: #374151;
-            --placeholder-color: #6b7280;
-            --border-color: #d1d5db;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --font-family: 'Inter', sans-serif;
+            --primary-color: #FF4B2B;
+            --secondary-color: #FF416C;
+            --form-bg-color: #FFFFFF;
+            --bg-color: #f6f5f7;
+            --text-color: #333;
+            --subtle-text-color: #555;
+            --input-bg-color: #eee;
+            --font-family: 'Montserrat', sans-serif;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
             font-family: var(--font-family);
-            background-color: var(--bg-color);
+            background: var(--bg-color);
             display: flex;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 1rem;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 100;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+        }
+
+        span {
+            font-size: 12px;
+        }
+
+        a {
+            color: var(--text-color);
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
         }
 
         .container {
-            width: 100%;
-            max-width: 448px;
+            background-color: var(--form-bg-color);
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
         }
 
         .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        form {
             background-color: var(--form-bg-color);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .form-container.hidden {
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
             text-align: center;
-            color: var(--text-color);
         }
 
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-label {
-            display: block;
-            color: var(--label-color);
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            background-color: #f9fafb;
-            border: 1px solid var(--border-color);
-            transition: all 0.2s ease-in-out;
-            font-size: 1rem;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4);
-        }
-
-        .btn {
-            width: 100%;
-            color: #ffffff;
-            font-weight: 700;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
+        input {
+            background-color: var(--input-bg-color);
             border: none;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-primary {
+        button {
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
             background-color: var(--primary-color);
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            cursor: pointer;
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-hover-color);
+        button:active {
+            transform: scale(0.95);
         }
 
-        .btn-success {
-            background-color: var(--success-color);
+        button:focus {
+            outline: none;
         }
 
-        .btn-success:hover {
-            background-color: var(--success-hover-color);
+        button.ghost {
+            background-color: transparent;
+            border-color: #FFFFFF;
         }
 
-        .form-footer {
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .overlay {
+            background: #FF416C;
+            background: -webkit-linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
             text-align: center;
-            color: var(--placeholder-color);
-            margin-top: 1.5rem;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
         }
 
-        .form-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
+        .overlay-left {
+            transform: translateX(-20%);
         }
 
-        .form-link:hover {
-            text-decoration: underline;
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        /* Animation */
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+
+            0%,
+            49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+
+            50%,
+            100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
         }
 
         .message {
             font-weight: 500;
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            text-align: center;
-        }
-
-        .message.hidden {
-            display: none;
+            font-size: 12px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
         }
 
         .message.success {
@@ -191,105 +260,83 @@ if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
             color: #991b1b;
         }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-
-        .remember-me label {
-            color: var(--label-color);
-            font-size: 0.875rem;
-        }
-
-        .remember-me input {
-            margin-right: 0.5rem;
+        .message:empty {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <!-- Login Form -->
-        <div id="login-form" class="form-container">
-            <h2 class="form-title">User Login</h2>
-            <div id="login-message" class="message hidden"></div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="login-username" class="form-label">Username</label>
-                    <input type="text" id="login-username" name="username" required class="form-input">
-                </div>
-                <div class="form-group">
-                    <label for="login-password" class="form-label">Password</label>
-                    <input type="password" id="login-password" name="password" required class="form-input">
-                </div>
-                <div class="remember-me">
-                    <label>
-                        <input type="checkbox" name="remember_me" id="remember-me"> Remember me
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-            <p class="form-footer">
-                Don't have an account? <a href="#" id="show-register" class="form-link">Register here</a>
-            </p>
-        </div>
-        <!-- Registration Form -->
-        <div id="register-form" class="form-container hidden">
-            <h2 class="form-title">User Register</h2>
-            <div id="register-message" class="message hidden"></div>
+    <div class="container" id="container">
+        <!-- Sign Up -->
+        <div class="form-container sign-up-container">
             <form id="registerForm">
-                <div class="form-group">
-                    <label for="register-username" class="form-label">Username</label>
-                    <input type="text" id="register-username" name="username" required class="form-input">
-                </div>
-                <div class="form-group">
-                    <label for="register-email" class="form-label">Email</label>
-                    <input type="email" id="register-email" name="email" required class="form-input">
-                </div>
-                <div class="form-group">
-                    <label for="register-password" class="form-label">Password</label>
-                    <input type="password" id="register-password" name="password" required class="form-input">
-                </div>
-                <button type="submit" class="btn btn-success">Register</button>
+                <h1>Create Account</h1>
+                <div id="register-message" class="message"></div>
+                <input type="text" id="register-nric" name="nric" placeholder="NRIC" required pattern="[0-9]*" title="NRIC must contain only numbers." />
+                <input type="email" id="register-email" name="email" placeholder="Email" required />
+                <input type="text" id="register-username" name="username" placeholder="Username (Optional)" />
+                <input type="password" id="register-password" name="password" placeholder="Password" required />
+                <button type="submit">Sign Up</button>
             </form>
-            <p class="form-footer">
-                Already have an account? <a href="#" id="show-login" class="form-link">Login here</a>
-            </p>
+        </div>
+        <!-- Sign In -->
+        <div class="form-container sign-in-container">
+            <form id="loginForm">
+                <h1>Sign In</h1>
+                <div id="login-message" class="message"></div>
+                <input type="text" id="login-identifier" name="login_identifier" placeholder="Email or NRIC" required />
+                <input type="password" id="login-password" name="password" placeholder="Password" required />
+                <a href="#">Forgot your password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+        <!-- Overlay -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start your journey with us</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const loginFormContainer = document.getElementById('login-form');
-            const registerFormContainer = document.getElementById('register-form');
-            const showRegisterLink = document.getElementById('show-register');
-            const showLoginLink = document.getElementById('show-login');
+            const signUpButton = document.getElementById('signUp');
+            const signInButton = document.getElementById('signIn');
+            const container = document.getElementById('container');
+
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
             const loginMessage = document.getElementById('login-message');
             const registerMessage = document.getElementById('register-message');
 
-            // API endpoints are now in the /api/ folder
             const LOGIN_ENDPOINT = 'api/user_login.php';
             const REGISTER_ENDPOINT = 'api/user_register.php';
 
-            showRegisterLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                loginFormContainer.classList.add('hidden');
-                registerFormContainer.classList.remove('hidden');
-            });
-            showLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                registerFormContainer.classList.add('hidden');
-                loginFormContainer.classList.remove('hidden');
-            });
+            // --- Animation Toggling ---
+            signUpButton.addEventListener('click', () => container.classList.add('right-panel-active'));
+            signInButton.addEventListener('click', () => container.classList.remove('right-panel-active'));
+
+            // --- Form Submission Logic ---
+            function displayMessage(element, message, type) {
+                element.textContent = message;
+                element.className = `message ${type}`;
+            }
 
             loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
                 const data = Object.fromEntries(formData.entries());
-                data.remember_me = document.getElementById('remember-me').checked;
+                // Note: "Remember Me" is not in this UI, so it's omitted.
 
                 try {
                     const response = await fetch(LOGIN_ENDPOINT, {
@@ -299,6 +346,7 @@ if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
                         },
                         body: JSON.stringify(data)
                     });
+                    console.log(response);
                     const result = await response.json();
                     if (response.ok && result.redirect) {
                         displayMessage(loginMessage, result.message, 'success');
@@ -309,7 +357,7 @@ if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
                         displayMessage(loginMessage, result.message || 'An error occurred.', 'error');
                     }
                 } catch (error) {
-                    displayMessage(loginMessage, 'An unexpected error occurred.', 'error');
+                    displayMessage(loginMessage, error.message || 'An unexpected error occurred.', 'error');
                 }
             });
 
@@ -317,10 +365,19 @@ if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
                 e.preventDefault();
                 const formData = new FormData(this);
                 const data = Object.fromEntries(formData.entries());
+
+                const nricInput = document.getElementById('register-nric');
+                if (!/^[0-9]+$/.test(data.nric)) {
+                    displayMessage(registerMessage, 'NRIC must contain only numbers.', 'error');
+                    nricInput.focus();
+                    return;
+                }
+
                 if (data.password.length < 6) {
                     displayMessage(registerMessage, 'Password must be at least 6 characters long.', 'error');
                     return;
                 }
+
                 try {
                     const response = await fetch(REGISTER_ENDPOINT, {
                         method: 'POST',
@@ -331,11 +388,10 @@ if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
                     });
                     const result = await response.json();
                     if (response.status === 201) {
-                        displayMessage(registerMessage, result.message, 'success');
+                        displayMessage(registerMessage, 'Success! Please sign in.', 'success');
                         setTimeout(() => {
-                            registerForm.reset();
-                            showLoginLink.click();
-                            loginMessage.classList.add('hidden');
+                            signInButton.click(); // Switch back to the sign-in panel
+                            document.getElementById('login-identifier').value = data.email;
                             displayMessage(loginMessage, 'Registration successful! Please log in.', 'success');
                         }, 2000);
                     } else {
@@ -345,15 +401,6 @@ if (isset($_SESSION['user_loggedin']) && $_SESSION['user_loggedin'] === true) {
                     displayMessage(registerMessage, 'An unexpected error occurred.', 'error');
                 }
             });
-
-            function displayMessage(element, message, type) {
-                element.textContent = message;
-                element.className = `message ${type}`;
-                element.classList.remove('hidden');
-                setTimeout(() => {
-                    element.classList.add('hidden');
-                }, 5000);
-            }
         });
     </script>
 </body>
