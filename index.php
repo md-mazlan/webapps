@@ -2,12 +2,35 @@
 // Include necessary classes from the 'php' folder.
 require_once 'php/database.php';
 require_once 'php/content.php';
+require_once 'php/user_auth_check.php'; // To check for public user login status
+require_once 'php/admin_auth_check.php'; // To check for admin login status
 
-// Fetch all content data from the database using the enhanced getAll() method.
+// --- Filter and Pagination Logic ---
 $database = new Database();
 $db = $database->connect();
 $content = new Content($db);
-$allContent = $content->getAll();
+
+$is_user_logged_in = isUserLoggedIn();
+$is_admin_logged_in = isAdminLoggedIn();
+
+// Define allowed content types for filtering and validate user input.
+$allowed_types = ['article', 'event', 'gallery', 'video'];
+$filter_type = isset($_GET['type']) && in_array($_GET['type'], $allowed_types) ? $_GET['type'] : null;
+
+$items_per_page = 9; // Display 9 items per page
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($current_page < 1) {
+    $current_page = 1;
+}
+$offset = ($current_page - 1) * $items_per_page;
+
+// Fetch total count and calculate total pages based on the filter
+$total_items = $content->getTotalCount($filter_type);
+$total_pages = ceil($total_items / $items_per_page);
+
+// Fetch the content for the current page with the filter
+$allContent = $content->getAll($items_per_page, $offset, $filter_type);
+
 
 /**
  * Helper function to get a YouTube thumbnail from a URL.
@@ -19,7 +42,6 @@ function getYouTubeThumbnail($url)
     if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $url, $match)) {
         return 'https://img.youtube.com/vi/' . $match[1] . '/hqdefault.jpg';
     }
-    // Return a fallback image if no valid YouTube ID is found.
     return 'https://placehold.co/400x225/111827/FFFFFF?text=Video';
 }
 
@@ -34,10 +56,10 @@ function create_excerpt($text, $length = 150)
     if (empty($text)) {
         return '';
     }
-    $text = strip_tags($text); // Remove any HTML tags
+    $text = strip_tags($text);
     if (strlen($text) > $length) {
         $text = substr($text, 0, $length);
-        $text = substr($text, 0, strrpos($text, ' ')); // Cut to the last word
+        $text = substr($text, 0, strrpos($text, ' '));
         $text .= '...';
     }
     return $text;
@@ -89,8 +111,17 @@ function create_excerpt($text, $length = 150)
             font-weight: 500;
         }
 
-        .nav-links a {
-            margin-left: 1.5rem;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .page-wrapper {
@@ -101,12 +132,40 @@ function create_excerpt($text, $length = 150)
 
         .page-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .page-header h1 {
             font-family: var(--font-serif);
             font-size: 3rem;
+        }
+
+        .filter-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-nav a {
+            text-decoration: none;
+            color: var(--subtle-text-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            transition: all 0.2s ease;
+        }
+
+        .filter-nav a:hover {
+            color: var(--primary-color);
+            background-color: #eef2ff;
+        }
+
+        .filter-nav a.active {
+            color: var(--primary-color);
+            background-color: #dbeafe;
+            font-weight: 600;
         }
 
         .content-grid {
@@ -115,7 +174,6 @@ function create_excerpt($text, $length = 150)
             gap: 2rem;
         }
 
-        /* Base Card Style */
         .card {
             background-color: var(--card-bg-color);
             border-radius: 0.75rem;
@@ -179,7 +237,6 @@ function create_excerpt($text, $length = 150)
             margin-top: 0.75rem;
         }
 
-        /* Article Card (WordPress Style) */
         .card-article .card-footer {
             padding: 1rem 1.5rem;
             background-color: #f9fafb;
@@ -191,7 +248,6 @@ function create_excerpt($text, $length = 150)
             color: var(--primary-color);
         }
 
-        /* Event Card (Eventbrite Style) */
         .card-event .card-img-top {
             width: 100%;
             height: 180px;
@@ -204,7 +260,6 @@ function create_excerpt($text, $length = 150)
             color: var(--primary-color);
         }
 
-        /* Gallery Card (Instagram Style) */
         .card-gallery {
             position: relative;
             aspect-ratio: 1 / 1;
@@ -254,7 +309,6 @@ function create_excerpt($text, $length = 150)
             font-weight: 500;
         }
 
-        /* Video Card (YouTube Style) */
         .card-video .card-thumbnail {
             position: relative;
         }
@@ -274,6 +328,35 @@ function create_excerpt($text, $length = 150)
             font-size: 1rem;
             font-weight: 600;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 3rem;
+            gap: 0.5rem;
+        }
+
+        .page-link {
+            text-decoration: none;
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .page-link:hover {
+            background-color: #dbeafe;
+            border-color: var(--primary-color);
+        }
+
+        .page-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -281,8 +364,17 @@ function create_excerpt($text, $length = 150)
     <nav class="navbar">
         <a href="index.php">My Website</a>
         <div class="nav-links">
-            <a href="login.php">Login / Register</a>
-            <a href="admin/">Admin Login</a>
+            <?php if ($is_admin_logged_in): ?>
+                <span>Welcome, <?php echo htmlspecialchars($_SESSION['admin_username']); ?>!</span>
+                <a href="admin/dashboard.php">Admin Dashboard</a>
+            <?php elseif ($is_user_logged_in): ?>
+                <img src="<?php echo htmlspecialchars($_SESSION['profile_pic_url'] ?? 'https://placehold.co/32x32/e0e7ff/3730a3?text=U'); ?>" alt="My Profile" class="nav-avatar">
+                <a href="profile.php">My Profile</a>
+                <a href="api/user_logout.php">Logout</a>
+            <?php else: ?>
+                <a href="login.php">Login / Register</a>
+                <a href="admin/">Admin Login</a>
+            <?php endif; ?>
         </div>
     </nav>
 
@@ -291,8 +383,17 @@ function create_excerpt($text, $length = 150)
             <h1>Our Latest Content</h1>
         </header>
 
+        <!-- Filter Navigation -->
+        <div class="filter-nav">
+            <a href="index.php" class="<?php echo !$filter_type ? 'active' : ''; ?>">All</a>
+            <a href="index.php?type=article" class="<?php echo $filter_type == 'article' ? 'active' : ''; ?>">Articles</a>
+            <a href="index.php?type=event" class="<?php echo $filter_type == 'event' ? 'active' : ''; ?>">Events</a>
+            <a href="index.php?type=gallery" class="<?php echo $filter_type == 'gallery' ? 'active' : ''; ?>">Galleries</a>
+            <a href="index.php?type=video" class="<?php echo $filter_type == 'video' ? 'active' : ''; ?>">Videos</a>
+        </div>
+
         <?php if (empty($allContent)): ?>
-            <p style="text-align: center;">No content has been published yet.</p>
+            <p style="text-align: center;">No content found for this category.</p>
         <?php else: ?>
             <div class="content-grid">
                 <?php foreach ($allContent as $item): ?>
@@ -387,6 +488,30 @@ function create_excerpt($text, $length = 150)
                     <?php endswitch; ?>
                 <?php endforeach; ?>
             </div>
+
+            <!-- Pagination Links -->
+            <div class="pagination">
+                <?php
+                $base_url = "index.php?";
+                if ($filter_type) {
+                    $base_url .= "type=" . urlencode($filter_type) . "&";
+                }
+                ?>
+                <?php if ($current_page > 1): ?>
+                    <a href="<?php echo $base_url; ?>page=<?php echo $current_page - 1; ?>" class="page-link">&laquo; Previous</a>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="<?php echo $base_url; ?>page=<?php echo $i; ?>" class="page-link <?php if ($i == $current_page) echo 'active'; ?>">
+                        <?php echo $i; ?>
+                    </a>
+                <?php endfor; ?>
+
+                <?php if ($current_page < $total_pages): ?>
+                    <a href="<?php echo $base_url; ?>page=<?php echo $current_page + 1; ?>" class="page-link">Next &raquo;</a>
+                <?php endif; ?>
+            </div>
+
         <?php endif; ?>
     </main>
 </body>

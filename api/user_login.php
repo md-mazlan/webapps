@@ -12,20 +12,24 @@ $user = new User($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if (empty($data->username) || empty($data->password)) {
+if (empty($data->login_identifier) || empty($data->password)) {
     http_response_code(400);
-    echo json_encode(['message' => 'Login failed. Username and password are required.']);
+    echo json_encode(['message' => 'Login failed. Email/NRIC and password are required.']);
     exit();
 }
 
-$user->username = $data->username;
+$user->login_identifier = $data->login_identifier;
 $user->password = $data->password;
 
 if ($user->login()) {
     // Set user-specific session variables
     $_SESSION['user_id'] = $user->id;
     $_SESSION['username'] = $user->username;
-    $_SESSION['user_loggedin'] = true; // Use a unique session key for users
+    $_SESSION['user_loggedin'] = true;
+
+    // Fetch the user's profile to get the picture URL
+    $profileData = $user->getProfile($user->id);
+    $_SESSION['profile_pic_url'] = $profileData['profile_pic_url'] ?? null;
 
     if (!empty($data->remember_me) && $data->remember_me == true) {
         $token = $user->setRememberToken();

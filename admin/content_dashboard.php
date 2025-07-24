@@ -96,24 +96,40 @@ $allContent = $content->getAll();
             font-family: var(--font-family);
             background-color: var(--bg-color);
             margin: 0;
-            padding: 2rem;
+            padding-top: 80px;
+            /* Add padding to prevent content from being hidden by the fixed header */
         }
 
         .dashboard-wrapper {
             max-width: 1000px;
             margin: auto;
+            padding: 2rem;
         }
 
         .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--card-bg-color);
+            box-shadow: 0 2px 4px var(--shadow-color);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-sizing: border-box;
+        }
+
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            max-width: 1000px;
+            margin: auto;
         }
 
         .header h1 {
-            font-size: 2.25rem;
+            font-size: 1.5rem;
             color: var(--text-color);
+            margin: 0;
         }
 
         .btn {
@@ -142,6 +158,11 @@ $allContent = $content->getAll();
 
         .btn-primary:hover {
             background-color: var(--primary-hover-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--border-color);
+            color: var(--text-color);
         }
 
         .card {
@@ -266,12 +287,17 @@ $allContent = $content->getAll();
 </head>
 
 <body>
-    <div class="dashboard-wrapper">
-        <header class="header">
+    <header class="header">
+        <div class="header-content">
             <h1>Content Management</h1>
-            <a href="../api/admin_logout.php" class="btn btn-danger">Logout</a>
-        </header>
+            <div>
+                <a href="dashboard.php" class="btn btn-secondary" style="margin-right: 1rem;">&larr; Main Dashboard</a>
+                <a href="../api/admin_logout.php" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </header>
 
+    <div class="dashboard-wrapper">
         <?php if ($message): ?>
             <div class="message <?php echo $message_type; ?>"><?php echo htmlspecialchars($message); ?></div>
         <?php endif; ?>

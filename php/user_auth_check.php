@@ -34,6 +34,7 @@ function isUserLoggedIn()
             $_SESSION['user_id'] = $user->id;
             $_SESSION['username'] = $user->username;
             $_SESSION['user_loggedin'] = true;
+            $_SESSION['profile_pic_url'] = $user->profile_pic_url; // Save profile pic from token validation
 
             return true;
         } else {

@@ -12,18 +12,24 @@ if (!isAdminLoggedIn()) {
 require_once '../php/database.php';
 require_once '../php/admin.php';
 
-// Initialize objects and fetch active sessions.
+// Initialize objects and fetch data.
 $database = new Database();
 $db = $database->connect();
 $admin = new Admin($db);
 $admin->id = $_SESSION['admin_id']; // Set admin ID from the active session.
 
-// Pass the current session's token to identify it in the list.
+// Fetch active sessions.
 $currentToken = $_COOKIE['admin_remember_token'] ?? '';
 $active_sessions = $admin->getActiveSessions($currentToken);
 
+// Fetch site statistics.
+$total_users = $admin->getTotalUsersCount();
+$total_content = $admin->getTotalContentCount();
+$total_likes = $admin->getTotalLikesCount();
+$total_comments = $admin->getTotalCommentsCount();
+
 // Dynamic contextual information.
-$currentTime = "Wednesday, July 23, 2025 at 5:21 PM";
+$currentTime = "Thursday, July 24, 2025 at 9:43 AM";
 $location = "Kota Kinabalu, Sabah, Malaysia";
 ?>
 <!DOCTYPE html>
@@ -122,7 +128,7 @@ $location = "Kota Kinabalu, Sabah, Malaysia";
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
         }
 
@@ -209,8 +215,34 @@ $location = "Kota Kinabalu, Sabah, Malaysia";
                     <span><?php echo htmlspecialchars($location); ?></span>
                 </div>
                 <div class="info-item">
-                    <p>Quick Access</p>
-                    <a href="content_dashboard.php" class="btn-primary" style="display:inline-block; text-align:center;">Manage Content &rarr;</a>
+                    <p>Content Management</p>
+                    <a href="content_dashboard.php">Manage Content &rarr;</a>
+                </div>
+                <div class="info-item">
+                    <p>User Management</p>
+                    <a href="view_users.php">View All Users &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Site Statistics</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <p>Total Public Users</p>
+                    <span><?php echo $total_users; ?></span>
+                </div>
+                <div class="info-item">
+                    <p>Total Content Posts</p>
+                    <span><?php echo $total_content; ?></span>
+                </div>
+                <div class="info-item">
+                    <p>Total Likes</p>
+                    <span><?php echo $total_likes; ?></span>
+                </div>
+                <div class="info-item">
+                    <p>Total Comments</p>
+                    <span><?php echo $total_comments; ?></span>
                 </div>
             </div>
         </div>

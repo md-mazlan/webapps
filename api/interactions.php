@@ -1,11 +1,11 @@
-<?php
-// Start the session at the very beginning to access session data.
-session_start();
+<?php // api/interactions.php
 
 // This file acts as a central API for handling user interactions like likes and comments.
-require_once 'auth_check.php';
-require_once 'database.php';
-require_once 'content.php';
+
+// Use the centralized user authentication check. Note the relative path.
+require_once '../php/user_auth_check.php';
+require_once '../php/database.php';
+require_once '../php/content.php';
 
 header('Content-Type: application/json');
 
@@ -15,29 +15,38 @@ header('Content-Type: application/json');
  * Handles processing user interactions such as likes and comments by acting
  * as a controller that receives API requests and routes them appropriately.
  */
-class InteractionController {
+class InteractionController
+{
     private $db;
     private $content;
     private $user_id;
+    private $is_user_loggedin = false;
 
     /**
-     * Constructor to initialize the controller with a database connection.
+     * Constructor to initialize the controller with a database connection
+     * and check for a public user's login status.
      * @param PDO $db The active database connection.
      */
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
         $this->content = new Content($db);
-        // Now that the session has been started, this will be correctly populated.
-        $this->user_id = $_SESSION['user_id'] ?? null;
+
+        // Use the centralized function to check login status.
+        $this->is_user_loggedin = isUserLoggedIn();
+        if ($this->is_user_loggedin) {
+            $this->user_id = $_SESSION['user_id'];
+        }
     }
 
     /**
      * Main handler for all incoming requests.
      * It validates the request and routes it to the appropriate private method.
      */
-    public function handleRequest() {
+    public function handleRequest()
+    {
         // Check if the user is logged in.
-        if (!$this->user_id) {
+        if (!$this->is_user_loggedin) {
             $this->sendResponse(['message' => 'You must be logged in to perform this action.'], 401);
             return;
         }
@@ -69,7 +78,8 @@ class InteractionController {
      * Handles the logic for liking or unliking a piece of content.
      * @param int $content_id The ID of the content.
      */
-    private function toggleLike($content_id) {
+    private function toggleLike($content_id)
+    {
         if ($this->content->hasUserLiked($content_id, $this->user_id)) {
             if ($this->content->removeLike($content_id, $this->user_id)) {
                 $this->sendResponse(['action' => 'unliked']);
@@ -90,7 +100,8 @@ class InteractionController {
      * @param int $content_id The ID of the content.
      * @param string $comment_text The text of the comment.
      */
-    private function addComment($content_id, $comment_text) {
+    private function addComment($content_id, $comment_text)
+    {
         if (empty(trim($comment_text))) {
             $this->sendResponse(['message' => 'Comment cannot be empty.']);
             return;
@@ -100,7 +111,7 @@ class InteractionController {
             $this->sendResponse([
                 'message' => 'Comment added successfully.',
                 'comment' => [
-                    'username' => $_SESSION['username'],
+                    'username' => $_SESSION['username'], // Assumes username is in the user session
                     'comment' => htmlspecialchars($comment_text),
                     'created_at' => date('Y-m-d H:i:s')
                 ]
@@ -115,9 +126,9 @@ class InteractionController {
      * @param array $data The data to be encoded as JSON.
      * @param int $statusCode The HTTP status code to send.
      */
-    private function sendResponse($data, $statusCode = 200) {
+    private function sendResponse($data, $statusCode = 200)
+    {
         http_response_code($statusCode);
-        // Ensure 'status' is set for consistency.
         if (!isset($data['status'])) {
             $data['status'] = ($statusCode >= 200 && $statusCode < 300) ? 'success' : 'error';
         }
@@ -134,4 +145,3 @@ $db = $database->connect();
 // Create a controller instance and handle the request.
 $controller = new InteractionController($db);
 $controller->handleRequest();
-?>

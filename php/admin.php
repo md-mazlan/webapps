@@ -1,53 +1,52 @@
 <?php
+
 /**
  * Admin Class
  *
- * Manages admin data and authentication logic.
- * The table name used is 'admins'.
+ * Manages admin data, authentication logic, and provides methods
+ * for viewing and managing public users.
  */
-class Admin {
+class Admin
+{
     private $conn;
     // Table names
     private $table_name = 'admins';
-    private $tokens_table = 'auth_tokens';
+    private $tokens_table = 'admin_tokens';
+    private $users_table = 'users'; // Reference to the public users table
+    private $profiles_table = 'user_profiles'; // Reference to the profiles table
+    private $content_table = 'content';
+    private $likes_table = 'likes';
+    private $comments_table = 'comments';
 
     public $id;
     public $username;
     public $email;
     public $password;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    /**
-     * Registers a new admin.
-     * @return bool True on success, false otherwise.
-     */
-    public function register() {
+    // --- Admin Authentication Methods (Unchanged) ---
+    public function register()
+    {
         $this->username = htmlspecialchars(strip_tags($this->username));
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->password = htmlspecialchars(strip_tags($this->password));
-
         if ($this->adminExists()) {
             return false;
         }
-
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
         $query = "INSERT INTO " . $this->table_name . " (username, email, password) VALUES (:username, :email, :password)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $password_hash);
-
         return $stmt->execute();
     }
-
-    /**
-     * Authenticates an admin.
-     * @return bool True on success, false otherwise.
-     */
-    public function login() {
+    public function login()
+    {
         $this->username = htmlspecialchars(strip_tags($this->username));
         $query = "SELECT id, username, password FROM " . $this->table_name . " WHERE username = :username LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
@@ -63,12 +62,8 @@ class Admin {
         }
         return false;
     }
-    
-    /**
-     * Checks if an admin with the given username or email already exists.
-     * @return bool True if the admin exists, false otherwise.
-     */
-    private function adminExists() {
+    private function adminExists()
+    {
         $query = "SELECT id FROM " . $this->table_name . " WHERE username = :username OR email = :email LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':username', $this->username);
@@ -76,12 +71,8 @@ class Admin {
         $stmt->execute();
         return $stmt->rowCount() > 0;
     }
-
-    /**
-     * Sets a "Remember Me" token for the admin.
-     * @return string|false The token on success, false on failure.
-     */
-    public function setRememberToken() {
+    public function setRememberToken()
+    {
         $token = bin2hex(random_bytes(32));
         $token_hash = hash('sha256', $token);
         $expires = new DateTime();
@@ -96,17 +87,16 @@ class Admin {
         $stmt->bindParam(':expires_at', $expires_at);
         $stmt->bindParam(':ip_address', $ip_address);
         $stmt->bindParam(':device_info', $device_info);
-        if ($stmt->execute()) { return $token; }
+        if ($stmt->execute()) {
+            return $token;
+        }
         return false;
     }
-
-    /**
-     * Validates a "Remember Me" token.
-     * @param string $token The token to validate.
-     * @return bool True if valid, false otherwise.
-     */
-    public function validateRememberToken($token) {
-        if (empty($token)) { return false; }
+    public function validateRememberToken($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
         $token_hash = hash('sha256', $token);
         $query = "SELECT u.id, u.username, t.id as token_id FROM " . $this->tokens_table . " t JOIN " . $this->table_name . " u ON t.user_id = u.id WHERE t.token = :token AND t.expires_at > NOW() LIMIT 1";
         $stmt = $this->conn->prepare($query);
@@ -124,27 +114,19 @@ class Admin {
         }
         return false;
     }
-    
-    /**
-     * Clears a "Remember Me" token upon logout.
-     * @param string $token The token to clear.
-     * @return bool True on success, false otherwise.
-     */
-    public function clearRememberToken($token) {
-        if (empty($token)) { return false; }
+    public function clearRememberToken($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
         $token_hash = hash('sha256', $token);
         $query = "DELETE FROM " . $this->tokens_table . " WHERE token = :token";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':token', $token_hash);
         return $stmt->execute();
     }
-
-    /**
-     * Retrieves all active sessions for the current admin.
-     * @param string $currentToken The current session's token.
-     * @return array A list of active sessions.
-     */
-    public function getActiveSessions($currentToken = '') {
+    public function getActiveSessions($currentToken = '')
+    {
         if (empty($this->id)) {
             return [];
         }
@@ -156,5 +138,164 @@ class Admin {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // --- User Management Methods ---
+    public function getAllUsers($limit = 10, $offset = 0, $searchTerm = null)
+    {
+        $query = "SELECT u.id, u.username, u.email, u.nric, u.created_at, p.profile_pic_url,
+                  (SELECT COUNT(*) FROM " . $this->likes_table . " l WHERE l.user_id = u.id) as like_count,
+                  (SELECT COUNT(*) FROM " . $this->comments_table . " co WHERE co.user_id = u.id) as comment_count
+                  FROM " . $this->users_table . " u
+                  LEFT JOIN " . $this->profiles_table . " p ON u.id = p.user_id";
+        $whereClause = '';
+        if (!empty($searchTerm)) {
+            $whereClause = " WHERE u.username LIKE :searchTerm OR u.email LIKE :searchTerm OR u.nric LIKE :searchTerm";
+        }
+        $query .= $whereClause . " ORDER BY u.created_at DESC LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->conn->prepare($query);
+
+        if (!empty($searchTerm)) {
+            $searchTerm = "%" . $searchTerm . "%";
+            $stmt->bindParam(':searchTerm', $searchTerm);
+        }
+
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUserById($user_id)
+    {
+        $query = "SELECT id, username, email, nric FROM " . $this->users_table . " WHERE id = :user_id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateUser($user_id, $data)
+    {
+        if (empty($user_id) || empty($data)) {
+            return false;
+        }
+
+        $query = "UPDATE " . $this->users_table . " SET username = :username, email = :email, nric = :nric WHERE id = :user_id";
+        $stmt = $this->conn->prepare($query);
+
+        $username = htmlspecialchars(strip_tags($data['username']));
+        $email = htmlspecialchars(strip_tags($data['email']));
+        $nric = htmlspecialchars(strip_tags($data['nric']));
+
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':nric', $nric);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getUsersForExport(array $columns = ['id', 'username', 'email', 'created_at'])
+    {
+        $columnMap = [
+            'id' => 'u.id',
+            'username' => 'u.username',
+            'email' => 'u.email',
+            'nric' => 'u.nric',
+            'created_at' => 'u.created_at',
+            'full_name' => 'p.full_name',
+            'bio' => 'p.bio',
+            'profile_pic_url' => 'p.profile_pic_url',
+            'company' => 'e.company',
+            'job_title' => 'e.job_title',
+            'start_date' => 'e.start_date',
+            'end_date' => 'e.end_date',
+            'is_current' => 'e.is_current'
+        ];
+
+        $selectedColumnsSql = [];
+        foreach ($columns as $col) {
+            if (isset($columnMap[$col])) {
+                $selectedColumnsSql[] = $columnMap[$col] . ' AS ' . $col;
+            }
+        }
+
+        if (empty($selectedColumnsSql)) {
+            $selectedColumnsSql = ['u.id AS id', 'u.username AS username', 'u.email AS email', 'u.created_at AS created_at'];
+        }
+
+        $columnString = implode(', ', $selectedColumnsSql);
+
+        $query = "
+            SELECT {$columnString} 
+            FROM {$this->users_table} u
+            LEFT JOIN user_profiles p ON u.id = p.user_id
+            LEFT JOIN user_employment e ON u.id = e.user_id
+            ORDER BY u.created_at DESC
+        ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function deleteUser($user_id)
+    {
+        if (empty($user_id)) {
+            return false;
+        }
+        $query = "DELETE FROM " . $this->users_table . " WHERE id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    // --- Dashboard Stats Methods ---
+    public function getTotalUsersCount($searchTerm = null)
+    {
+        $query = "SELECT COUNT(*) as count FROM " . $this->users_table;
+        $whereClause = '';
+        if (!empty($searchTerm)) {
+            $whereClause = " WHERE username LIKE :searchTerm OR email LIKE :searchTerm OR nric LIKE :searchTerm";
+        }
+        $query .= $whereClause;
+
+        $stmt = $this->conn->prepare($query);
+
+        if (!empty($searchTerm)) {
+            $searchTerm = "%" . $searchTerm . "%";
+            $stmt->bindParam(':searchTerm', $searchTerm);
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($result['count'] ?? 0);
+    }
+    public function getTotalContentCount()
+    {
+        $query = "SELECT COUNT(*) as count FROM " . $this->content_table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($result['count'] ?? 0);
+    }
+    public function getTotalLikesCount()
+    {
+        $query = "SELECT COUNT(*) as count FROM " . $this->likes_table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($result['count'] ?? 0);
+    }
+    public function getTotalCommentsCount()
+    {
+        $query = "SELECT COUNT(*) as count FROM " . $this->comments_table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($result['count'] ?? 0);
+    }
 }
-?>

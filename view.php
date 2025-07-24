@@ -69,8 +69,10 @@ if ($content_id) {
             font-weight: 500;
         }
 
-        .nav-links a {
-            margin-left: 1rem;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
         .admin-link {
@@ -248,11 +250,13 @@ if ($content_id) {
         <a href="index.php">My Website</a>
         <div class="nav-links">
             <?php if ($is_admin_logged_in): ?>
+                <span>Welcome, <?php echo htmlspecialchars($_SESSION['admin_username']); ?>!</span>
                 <a href="admin/dashboard.php">Admin Dashboard</a>
                 <?php if ($contentData): ?>
                     <a href="admin/edit_content.php?id=<?php echo $content_id; ?>" class="admin-link">Edit Content</a>
                 <?php endif; ?>
             <?php elseif ($is_user_logged_in): ?>
+                <span>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                 <a href="api/user_logout.php">Logout</a>
             <?php else: ?>
                 <a href="login.php">Login / Register</a>
@@ -278,7 +282,6 @@ if ($content_id) {
                         <?php
                         case 'event': ?>
                             <?php if (!empty($contentData['banner_url'])): ?>
-                                <!-- Corrected Path: Points to the root /uploads/ folder -->
                                 <img src="<?php echo htmlspecialchars($contentData['banner_url']); ?>" alt="Event Banner" class="event-banner">
                             <?php endif; ?>
                             <p><strong>Event Date:</strong> <?php echo date('l, F j, Y \a\t g:i A', strtotime($contentData['event_date'])); ?></p>
@@ -291,7 +294,6 @@ if ($content_id) {
                             <div class="gallery-grid">
                                 <?php if (!empty($contentData['images'])): ?>
                                     <?php foreach ($contentData['images'] as $image): ?>
-                                        <!-- Corrected Path -->
                                         <a href="<?php echo htmlspecialchars($image['image_src']); ?>" target="_blank">
                                             <img src="<?php echo htmlspecialchars($image['image_src']); ?>" alt="<?php echo htmlspecialchars($image['title']); ?>">
                                         </a>
@@ -311,7 +313,6 @@ if ($content_id) {
                             <?php if (!empty($contentData['uploaded_src'])): ?>
                                 <h4><?php echo nl2br(htmlspecialchars($contentData['uploaded_description'])); ?></h4>
                                 <video controls style="width:100%; border-radius: 0.5rem;">
-                                    <!-- Corrected Path -->
                                     <source src="<?php echo htmlspecialchars($contentData['uploaded_src']); ?>" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
