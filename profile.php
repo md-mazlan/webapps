@@ -283,7 +283,7 @@ $profileData = $user->getProfile($user_id);
         <div class="profile-grid">
             <!-- Left Column: Profile Picture -->
             <div class="card profile-pic-container">
-                <img id="profile-pic-img" src="<?php echo BASE_URL . '/' . htmlspecialchars($profileData['profile_pic_url'] ?? 'https://placehold.co/150x150/e0e7ff/3730a3?text=User'); ?>" alt="Profile Picture" class="profile-pic">
+                <img id="profile-pic-img" src="<?php echo empty($profileData['profile_pic_url']) ?  'https://placehold.co/150x150/e0e7ff/3730a3?text=User' : BASE_URL . '/' . htmlspecialchars($profileData['profile_pic_url']); ?>" alt="Profile Picture" class="profile-pic">
                 <h3 style="margin-bottom: 0.5rem;"><?php echo htmlspecialchars($profileData['username']); ?></h3>
                 <p style="color: var(--subtle-text-color); margin-top: 0;"><?php echo htmlspecialchars($profileData['email']); ?></p>
                 <form id="profile-pic-form">
@@ -298,12 +298,13 @@ $profileData = $user->getProfile($user_id);
             <!-- Right Column: Profile Details -->
             <div class="card">
                 <div class="tabs">
-                    <button class="tab-link active" data-tab="profile">Profile & Employment</button>
+                    <button class="tab-link active" data-tab="personal">Personal</button>
+                    <button class="tab-link" data-tab="employment">Employment</button>
                     <button class="tab-link" data-tab="security">Security</button>
                 </div>
 
-                <div id="profile" class="tab-content active">
-                    <form id="profile-details-form">
+                <div id="personal" class="tab-content active">
+                    <form id="personal-details-form">
                         <h2 class="card-title">Personal Information</h2>
                         <div class="form-group">
                             <label for="full_name">Full Name</label>
@@ -361,8 +362,13 @@ $profileData = $user->getProfile($user_id);
                                 <input type="text" id="state" name="state" class="form-control" value="<?php echo htmlspecialchars($profileData['state'] ?? ''); ?>">
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-primary">Save Personal Info</button>
+                    </form>
+                </div>
 
-                        <h2 class="card-title" style="margin-top: 2rem;">Employment Details</h2>
+                <div id="employment" class="tab-content">
+                    <form id="employment-details-form">
+                        <h2 class="card-title">Employment Details</h2>
                         <div class="form-group">
                             <label for="company">Company</label>
                             <input type="text" id="company" name="company" class="form-control" value="<?php echo htmlspecialchars($profileData['company'] ?? ''); ?>">
@@ -392,7 +398,7 @@ $profileData = $user->getProfile($user_id);
                             <label for="responsibilities">Responsibilities</label>
                             <textarea id="responsibilities" name="responsibilities" rows="4" class="form-control"><?php echo htmlspecialchars($profileData['responsibilities'] ?? ''); ?></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="submit" class="btn btn-primary">Save Employment Info</button>
                     </form>
                 </div>
 
@@ -446,15 +452,14 @@ $profileData = $user->getProfile($user_id);
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // --- Element Selections ---
-            const profileDetailsForm = document.getElementById('profile-details-form');
-            const saveButton = profileDetailsForm.querySelector('button[type="submit"]');
+            const personalDetailsForm = document.getElementById('personal-details-form');
+            const employmentDetailsForm = document.getElementById('employment-details-form');
             const profilePicInput = document.getElementById('profile-pic-input');
             const changePicButton = document.getElementById('change-pic-btn');
             const feedbackMessage = document.getElementById('feedback-message');
             const isCurrentCheckbox = document.getElementById('is_current');
             const endDateGroup = document.getElementById('end-date-group');
             const passwordChangeForm = document.getElementById('password-change-form');
-            const passwordButton = passwordChangeForm.querySelector('button[type="submit"]');
             const deleteAccountBtn = document.getElementById('delete-account-btn');
             const deleteModal = document.getElementById('delete-modal');
             const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
@@ -488,15 +493,16 @@ $profileData = $user->getProfile($user_id);
                 }, 5000);
             }
 
-            // --- Handle Profile & Employment Update ---
-            profileDetailsForm.addEventListener('submit', async function(e) {
+            // --- Handle Personal Info Update ---
+            personalDetailsForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                saveButton.disabled = true;
-                saveButton.textContent = 'Saving...';
-                saveButton.classList.add('loading');
+                const btn = this.querySelector('button[type="submit"]');
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = 'Saving...';
 
                 const formData = new FormData(this);
-                formData.append('action', 'update_profile_details');
+                formData.append('action', 'update_personal_info');
 
                 try {
                     const response = await fetch(API_ENDPOINT, {
@@ -508,9 +514,34 @@ $profileData = $user->getProfile($user_id);
                 } catch (error) {
                     showMessage('An unexpected error occurred.', 'error');
                 } finally {
-                    saveButton.disabled = false;
-                    saveButton.textContent = 'Save Changes';
-                    saveButton.classList.remove('loading');
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            });
+
+            // --- Handle Employment Info Update ---
+            employmentDetailsForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = this.querySelector('button[type="submit"]');
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = 'Saving...';
+
+                const formData = new FormData(this);
+                formData.append('action', 'update_employment_info');
+
+                try {
+                    const response = await fetch(API_ENDPOINT, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    showMessage(result.message, result.status);
+                } catch (error) {
+                    showMessage('An unexpected error occurred.', 'error');
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
                 }
             });
 

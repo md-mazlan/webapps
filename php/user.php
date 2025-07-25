@@ -164,6 +164,43 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function insertPersonalInfo($user_id, $data)
+    {
+        $query = 'INSERT INTO ' . $this->profiles_table . ' (user_id, full_name, gender, ethnic, phone, birthday, address1, address2, area, postal_code, city, state) VALUES (:user_id, :full_name, :gender, :ethnic, :phone, :birthday, :address1, :address2, :area, :postal_code, :city, :state)';
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':full_name', $data['full_name']);
+        $stmt->bindParam(':gender', $data['gender']);
+        $stmt->bindParam(':ethnic', $data['ethnic']);
+        $stmt->bindParam(':phone', $data['phone']);
+        $stmt->bindParam(':birthday', $data['birthday']);
+        $stmt->bindParam(':address1', $data['address1']);
+        $stmt->bindParam(':address2', $data['address2']);
+        $stmt->bindParam(':area', $data['area']);
+        $stmt->bindParam(':postal_code', $data['postal_code']);
+        $stmt->bindParam(':city', $data['city']);
+        $stmt->bindParam(':state', $data['state']);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function insertEmploymentInfo($user_id, $data)
+    {
+        $query = 'INSERT INTO ' . $this->employment_table . ' (user_id, company, job_title, department, start_date, end_date, is_current, responsibilities) VALUES (:user_id, :company, :job_title, :department, :start_date, :end_date, :is_current, :responsibilities)';
+        $stmt = $this->conn->prepare($query);
+        $is_current = isset($data['is_current']) ? 1 : 0;
+        $end_date = $is_current ? null : $data['end_date'];
+        $stmt->bindParam(':company', $data['company']);
+        $stmt->bindParam(':job_title', $data['job_title']);
+        $stmt->bindParam(':department', $data['department']);
+        $stmt->bindParam(':start_date', $data['start_date']);
+        $stmt->bindParam(':end_date', $end_date);
+        $stmt->bindParam(':is_current', $is_current, PDO::PARAM_INT);
+        $stmt->bindParam(':responsibilities', $data['responsibilities']);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     public function updatePersonalInfo($user_id, $data)
     {
         $query = "UPDATE " . $this->profiles_table . " SET 
@@ -280,6 +317,21 @@ class User
         } else {
             return ['status' => 'error', 'message' => 'Failed to delete account.'];
         }
+    }
+
+    public function isProfileComplete($user_id)
+    {
+        $query = "SELECT full_name FROM " . $this->profiles_table . " WHERE user_id = :user_id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // A profile is considered complete if the full_name is not empty.
+        if ($profile && !empty($profile['full_name'])) {
+            return true;
+        }
+        return false;
     }
 
     private function createEmptyProfile($user_id)

@@ -55,6 +55,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     switch ($action) {
+        case 'insert_personal_info':
+            $data = [
+                'full_name' => htmlspecialchars(strip_tags($_POST['full_name'] ?? '')),
+                'gender' => htmlspecialchars(strip_tags($_POST['gender'] ?? '')),
+                'ethnic' => htmlspecialchars(strip_tags($_POST['ethnic'] ?? '')),
+                'phone' => htmlspecialchars(strip_tags($_POST['phone'] ?? '')),
+                'birthday' => !empty($_POST['birthday']) ? $_POST['birthday'] : null,
+                'address1' => htmlspecialchars(strip_tags($_POST['address1'] ?? '')),
+                'address2' => htmlspecialchars(strip_tags($_POST['address2'] ?? '')),
+                'area' => htmlspecialchars(strip_tags($_POST['area'] ?? '')),
+                'postal_code' => htmlspecialchars(strip_tags($_POST['postal_code'] ?? '')),
+                'city' => htmlspecialchars(strip_tags($_POST['city'] ?? '')),
+                'state' => htmlspecialchars(strip_tags($_POST['state'] ?? ''))
+            ];
+            if ($user->insertPersonalInfo($user_id, $data)) {
+                $response = ['status' => 'success', 'message' => 'Personal info inserted successfully!'];
+            } else {
+                $response['message'] = 'Failed to insert personal information.';
+            }
+            break;
+
+        case 'insert_employment_info':
+            $data = [
+                'company' => htmlspecialchars(strip_tags($_POST['company'] ?? '')),
+                'job_title' => htmlspecialchars(strip_tags($_POST['job_title'] ?? '')),
+                'department' => htmlspecialchars(strip_tags($_POST['department'] ?? '')),
+                'start_date' => !empty($_POST['start_date']) ? $_POST['start_date'] : null,
+                'end_date' => !empty($_POST['end_date']) ? $_POST['end_date'] : null,
+                'is_current' => isset($_POST['is_current']) ? 1 : 0,
+                'responsibilities' => htmlspecialchars(strip_tags($_POST['responsibilities'] ?? ''))
+            ];
+            if ($user->insertEmploymentInfo($user_id, $data)) {
+                $response = ['status' => 'success', 'message' => 'Employment details inserted successfully!'];
+            } else {
+                $response['message'] = 'Failed to insert employment details.';
+            }
+            break;
+
         case 'update_personal_info':
             $data = [
                 'full_name' => htmlspecialchars(strip_tags($_POST['full_name'] ?? '')),
