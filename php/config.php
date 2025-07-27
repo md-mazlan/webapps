@@ -24,4 +24,4 @@ $script_name = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 $base_path = (strpos($_SERVER['REQUEST_URI'], '/api/') !== false || strpos($_SERVER['REQUEST_URI'], '/admin/') !== false) ? dirname($script_name) : $script_name;
 $base_url = rtrim($protocol . $host . $base_path, '/');
 
-define('BASE_URL', $base_url);
+define('BASE_URL', "/webapps");

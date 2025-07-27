@@ -1,0 +1,623 @@
+ .container {
+     max-width: 700px;
+     margin: 150px auto;
+     background: #fff;
+     border-radius: 16px;
+     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+     padding: 40px 32px 32px 32px;
+ }
+
+ .profile-header {
+     display: flex;
+     align-items: center;
+     margin-bottom: 32px;
+ }
+
+ .profile-dot {
+     width: 10px;
+     height: 10px;
+     background: #4f46e5;
+     border-radius: 50%;
+     margin-right: 10px;
+ }
+
+ .profile-title {
+     font-size: 20px;
+     font-weight: 600;
+     color: #22223b;
+ }
+
+ .profile-content {
+     display: flex;
+     gap: 32px;
+     align-items: flex-start;
+     margin-bottom: 50px;
+ }
+
+ .profile-image-section {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 20px;
+     flex: 1;
+ }
+
+ .profile-image-box {
+     position: relative;
+     width: 160px;
+     height: 160px;
+     background: #f4f4f6;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     overflow: hidden;
+
+     border: 4px solid #fff;
+     box-shadow: 0 2px 8px rgba(108, 99, 255, 0.10);
+ }
+
+ .profile-image-box img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     border-radius: 50%;
+ }
+
+ .profile-camera {
+     position: absolute;
+     top: 10px;
+     left: calc(120px / 2);
+     background: #fff;
+     border-radius: 50%;
+     width: 28px;
+     height: 28px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+     cursor: pointer;
+ }
+
+ .profile-camera svg {
+     width: 16px;
+     height: 16px;
+     color: #4f46e5;
+ }
+
+ .profile-actions {
+     display: flex;
+     gap: 16px;
+     margin-top: 10px;
+ }
+
+ .profile-action {
+     border: 2px dashed #bcbcd1;
+     border-radius: 8px;
+     padding: 18px 28px;
+     background: #fafbfc;
+     font-size: 15px;
+     color: #4f46e5;
+     font-weight: 600;
+     cursor: pointer;
+     transition: border-color 0.2s;
+ }
+
+ .profile-action:hover {
+     border-color: #4f46e5;
+ }
+
+ .profile-details {
+     flex: 8;
+     display: flex;
+     flex-direction: column;
+     gap: 14px;
+     margin-top: 10px;
+ }
+
+ .profile-details label {
+     font-size: 15px;
+     color: #22223b;
+     font-weight: 600;
+     margin-bottom: 2px;
+     display: block;
+ }
+
+ .profile-details span {
+     font-size: 15px;
+     color: #6c6c80;
+     font-weight: 400;
+ }
+
+ .edit-profile-btn {
+     margin-top: 24px;
+     padding: 10px 28px;
+     border: 1.5px solid #4f46e5;
+     background: #fff;
+     color: #4f46e5;
+     border-radius: 8px;
+     font-size: 15px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: background 0.2s, color 0.2s;
+ }
+
+ .edit-profile-btn:hover {
+     background: #4f46e5;
+     color: #fff;
+ }
+
+ @media (max-width: 700px) {
+     .container {
+         max-width: auto;
+         margin: 60px auto;
+     }
+
+     .profile-content {
+         flex-direction: column;
+         gap: 24px;
+         margin-bottom: 0px;
+     }
+
+     .profile-image-section {
+         width: 100%;
+         text-align: center;
+     }
+
+     .profile-details {
+         width: 100%;
+     }
+ }
+
+ /* === DARK MODE SUPPORT === */
+ body.dark-mode {
+     background: #18192a;
+     color: #fff;
+ }
+
+ body.dark-mode .container {
+     background: #23243a;
+     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+ }
+
+ body.dark-mode .profile-header {
+     /* no change needed */
+ }
+
+ body.dark-mode .profile-dot {
+     background: #6c63ff;
+ }
+
+ body.dark-mode .profile-title {
+     color: #fff;
+ }
+
+ body.dark-mode .profile-content {
+     /* no change needed */
+ }
+
+ body.dark-mode .profile-image-section {
+     /* no change needed */
+ }
+
+ body.dark-mode .profile-image-box {
+     background: #353657;
+ }
+
+ body.dark-mode .profile-image-box img {
+     /* no change needed */
+ }
+
+ body.dark-mode .profile-camera {
+     background: #353657;
+     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+ }
+
+ body.dark-mode .profile-camera svg {
+     color: #6c63ff;
+ }
+
+ body.dark-mode .profile-actions {
+     /* no change needed */
+ }
+
+ body.dark-mode .profile-action {
+     border-color: #6c63ff;
+     background: #23243a;
+     color: #6c63ff;
+ }
+
+ body.dark-mode .profile-action:hover {
+     border-color: #fff;
+ }
+
+ body.dark-mode .profile-details label {
+     color: #fff;
+ }
+
+ body.dark-mode .profile-details span {
+     color: #b0b0b0;
+ }
+
+ body.dark-mode .edit-profile-btn {
+     background: #23243a;
+     color: #6c63ff;
+     border-color: #6c63ff;
+ }
+
+ body.dark-mode .edit-profile-btn:hover {
+     background: #6c63ff;
+     color: #fff;
+ }
+
+
+ /* Modal styling */
+ .modal {
+     display: none;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.3);
+     /* Light overlay */
+     justify-content: center;
+     align-items: center;
+     z-index: 1010;
+ }
+
+ /* .modal *{
+        box-sizing: content-box;
+    } */
+ .modal-content {
+     background-color: #fff;
+     /* White modal background */
+     padding: 0px 20px 20px 20px;
+     width: 90%;
+     max-width: 800px;
+     max-height: 90%;
+     /* Limit the height of the modal */
+     overflow-y: auto;
+     overflow-x: hidden;
+     /* Enable vertical scrolling */
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+     color: #333;
+     /* Dark text */
+     position: relative;
+     max-height: 90vh;
+     /* Ensure the modal doesn't exceed the viewport height */
+ }
+
+
+ .modal-content h2 {
+     margin-top: 0;
+     color: #333;
+     /* Dark text */
+ }
+
+ .form-group {
+     margin-bottom: 15px;
+ }
+
+ .form-group>div {
+     display: inline-block;
+ }
+
+ .form-group label {
+     display: block;
+     margin-bottom: 5px;
+     font-weight: bold;
+     color: #333;
+     /* Dark text */
+ }
+
+ .form-group input,
+ .form-group select,
+ .form-group textarea {
+     width: 100%;
+     padding: 10px;
+     margin-bottom: 10px;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     background-color: #f9f9f9;
+     /* Light input background */
+     color: #333;
+     /* Dark text */
+ }
+
+ textarea {
+     resize: none;
+     height: 80px;
+ }
+
+ .btn {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     margin-right: 10px;
+ }
+
+ .btn-primary {
+     background-color: #04AA6D;
+     /* Green button */
+     color: white;
+ }
+
+ .btn-primary:hover {
+     background-color: #028a5e;
+ }
+
+ .btn-danger {
+     background-color: #d9534f;
+     /* Red button */
+     color: white;
+ }
+
+ .btn-danger:hover {
+     background-color: #c9302c;
+ }
+
+
+ /* Full-screen modal for mobile */
+ @media (max-width: 768px) {
+     .modal-content {
+         width: 100%;
+         height: 100%;
+         max-width: none;
+         max-height: none;
+         border-radius: 0;
+         padding: 0px 15px;
+     }
+
+     .modal-back-button {
+         top: 15px;
+         left: 15px;
+         background-color: transparent;
+         border: none;
+         color: #333;
+         /* Dark text for back button */
+         font-size: 18px;
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         gap: 5px;
+     }
+
+     .modal-back-button i {
+         font-size: 20px;
+     }
+
+     .list-tile {
+         flex-direction: column;
+         align-items: flex-start;
+     }
+
+     .list-tile .leading {
+         margin-bottom: 10px;
+     }
+
+     .list-tile .trailing {
+         margin-top: 10px;
+         justify-content: flex-start;
+     }
+ }
+
+ /* Toolbar inside modal */
+ .modal-toolbar {
+     display: flex;
+     align-items: center;
+     justify-content: flex-start;
+     /* Align items to the left */
+     background-color: #f0f0f0;
+     /* Light toolbar background */
+     padding: 10px 15px;
+     border-radius: 8px 8px 0 0;
+     margin: -20px -20px 20px -20px;
+     /* Adjust to align with modal padding */
+     color: #333;
+     /* Dark text */
+     position: sticky;
+     /* Ensure the toolbar stays at the top */
+     top: 0;
+     z-index: 10;
+     gap: 10px;
+     /* Add spacing between back button and title */
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+ }
+
+ .modal-toolbar h2 {
+     margin: 0;
+     font-size: 18px;
+     color: #333;
+     /* Dark text */
+     flex: 1;
+     /* Allow the title to take up remaining space */
+     text-align: left;
+     /* Align title to the left */
+ }
+
+ .modal-back-button {
+     background-color: transparent;
+     border: none;
+     color: #333;
+     /* Dark text */
+     font-size: 18px;
+     cursor: pointer;
+     display: flex;
+     align-items: center;
+     gap: 5px;
+     padding: 5px;
+     /* Add padding for better click area */
+ }
+
+ .modal-back-button i {
+     font-size: 20px;
+ }
+
+ /* Light mode (default) */
+ .container {
+     position: relative;
+     max-width: 700px;
+     width: 100%;
+     background: #fff;
+     padding: 25px;
+     border-radius: 8px;
+     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+ }
+
+ .container header {
+     font-size: 1.5rem;
+     color: #333;
+     font-weight: 500;
+     text-align: center;
+ }
+
+ .container .form {
+     margin-top: 30px;
+ }
+
+ .form .input-box {
+     width: 100%;
+     margin-top: 20px;
+ }
+
+ .input-box label {
+     color: #333;
+ }
+
+ .form :where(.input-box input, .select-box) {
+     position: relative;
+     height: 50px;
+     width: 100%;
+     outline: none;
+     font-size: 1rem;
+     color: #707070;
+     margin-top: 8px;
+     border: 1px solid #ddd;
+     border-radius: 6px;
+     padding: 0 15px;
+ }
+
+ .input-box input:focus {
+     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+ }
+
+ .form .column {
+     display: flex;
+     column-gap: 15px;
+ }
+
+ .form .gender-box {
+     margin-top: 20px;
+ }
+
+ .gender-box h3 {
+     color: #333;
+     font-size: 1rem;
+     font-weight: 400;
+     margin-bottom: 8px;
+ }
+
+ .form :where(.gender-option, .gender) {
+     display: flex;
+     align-items: center;
+     column-gap: 50px;
+     flex-wrap: wrap;
+ }
+
+ .form .gender {
+     column-gap: 5px;
+ }
+
+ .gender input {
+     accent-color: rgb(106, 120, 251);
+ }
+
+ .form :where(.gender input, .gender label) {
+     cursor: pointer;
+ }
+
+ .gender label {
+     color: #707070;
+ }
+
+ .address :where(input, .select-box) {
+     margin-top: 15px;
+ }
+
+ .select-box select {
+     height: 100%;
+     width: 100%;
+     outline: none;
+     border: none;
+     color: #707070;
+     font-size: 1rem;
+ }
+
+ .form button {
+     height: 55px;
+     width: 100%;
+     color: #fff;
+     font-size: 1rem;
+     font-weight: 400;
+     margin-top: 30px;
+     border: none;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     background: rgb(106, 140, 251);
+ }
+
+ .form button:hover {
+     background: rgb(56, 75, 250);
+ }
+
+ /* Dark mode */
+ .dark-mode .container {
+     background: #1e1e1e;
+     box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+ }
+
+ .dark-mode .container header {
+     color: #f0f0f0;
+ }
+
+ .dark-mode .input-box label,
+ .dark-mode .gender-box h3,
+ .dark-mode .gender label {
+     color: #ccc;
+ }
+
+ .dark-mode .form :where(.input-box input, .select-box) {
+     background-color: #2a2a2a;
+     color: #ddd;
+     border: 1px solid #444;
+ }
+
+ .dark-mode .input-box input:focus {
+     box-shadow: 0 0 0 1px #555;
+ }
+
+ .dark-mode .select-box select {
+     background-color: #2a2a2a;
+     color: #ddd;
+ }
+
+ .dark-mode .form button {
+     background: rgb(106, 140, 251);
+ }
+
+ .dark-mode .form button:hover {
+     background: rgb(56, 75, 250);
+ }
+
+ /*Responsive*/
+ @media screen and (max-width: 500px) {
+     .form .column {
+         flex-wrap: wrap;
+     }
+
+     .form :where(.gender-option, .gender) {
+         row-gap: 15px;
+     }
+ }

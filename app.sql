@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 25, 2025 at 01:17 AM
+-- Generation Time: Jul 27, 2025 at 08:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -242,6 +242,149 @@ INSERT INTO `likes` (`id`, `user_id`, `content_id`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sabah_dun_seats`
+--
+
+CREATE TABLE `sabah_dun_seats` (
+  `code` varchar(10) NOT NULL,
+  `seat` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sabah_dun_seats`
+--
+
+INSERT INTO `sabah_dun_seats` (`code`, `seat`) VALUES
+('N01', 'Banggi'),
+('N02', 'Bengkoka'),
+('N03', 'Pitas'),
+('N04', 'Tanjong Kapor'),
+('N05', 'Matunggong'),
+('N06', 'Bandau'),
+('N07', 'Tandek'),
+('N08', 'Pintasan'),
+('N09', 'Tempasuk'),
+('N10', 'Usukan'),
+('N11', 'Kadamaian'),
+('N12', 'Sulaman'),
+('N13', 'Pantai Dalit'),
+('N14', 'Tamparuli'),
+('N15', 'Kiulu'),
+('N16', 'Karambunai'),
+('N17', 'Darau'),
+('N18', 'Inanam'),
+('N19', 'Likas'),
+('N20', 'Api-Api'),
+('N21', 'Luyang'),
+('N22', 'Tanjung Aru'),
+('N23', 'Petagas'),
+('N24', 'Putatan'),
+('N25', 'Kepayan'),
+('N26', 'Moyog'),
+('N27', 'Kawang'),
+('N28', 'Pantai Manis'),
+('N29', 'Bongawan'),
+('N30', 'Membakut'),
+('N31', 'Klias'),
+('N32', 'Kuala Penyu'),
+('N33', 'Lumadan'),
+('N34', 'Sindumin'),
+('N35', 'Kundasang'),
+('N36', 'Karanaan'),
+('N37', 'Paginatan'),
+('N38', 'Tambunan'),
+('N39', 'Bingkor'),
+('N40', 'Liawan'),
+('N41', 'Melalap'),
+('N42', 'Kemabong'),
+('N43', 'Sook'),
+('N44', 'Nabawan'),
+('N45', 'Sungai Sibuga'),
+('N46', 'Sungai Manila'),
+('N47', 'Sugut'),
+('N48', 'Labuk'),
+('N49', 'Gum-Gum'),
+('N50', 'Sungai Sibuga'),
+('N51', 'Sekong'),
+('N52', 'Karamunting'),
+('N53', 'Elopura'),
+('N54', 'Tanjong Papat'),
+('N55', 'Kuamut'),
+('N56', 'Sukau'),
+('N57', 'Tungku'),
+('N58', 'Lahad Datu'),
+('N59', 'Kunak'),
+('N60', 'Sulabayan'),
+('N61', 'Senallang'),
+('N62', 'Bugaya'),
+('N63', 'Balung'),
+('N64', 'Apas'),
+('N65', 'Sri Tanjung'),
+('N66', 'Merotai'),
+('N67', 'Tanjong Batu'),
+('N68', 'Sebatik'),
+('N69', 'Bandar Lama'),
+('N70', 'Bukit Garam'),
+('N71', 'Segama'),
+('N72', 'Sungai Manila'),
+('N73', 'Darvel');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sabah_ethnic_groups`
+--
+
+CREATE TABLE `sabah_ethnic_groups` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `category` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sabah_ethnic_groups`
+--
+
+INSERT INTO `sabah_ethnic_groups` (`id`, `name`, `category`) VALUES
+(1, 'Kadazan', 'Major'),
+(2, 'Dusun', 'Major'),
+(3, 'Rungus', 'Major'),
+(4, 'Murut', 'Major'),
+(5, 'Bajau', 'Major'),
+(6, 'Irranun', 'Major'),
+(7, 'Suluk', 'Major'),
+(8, 'Brunei Malay', 'Major'),
+(9, 'Lundayeh', 'Major'),
+(10, 'Bisaya', 'Major'),
+(11, 'Ida\'an', 'Major'),
+(12, 'Sama-Bajau', 'Major'),
+(13, 'Sungai', 'Major'),
+(14, 'Tambanuo', 'Other Indigenous'),
+(15, 'Dumpas', 'Other Indigenous'),
+(16, 'Tidong', 'Other Indigenous'),
+(17, 'Bagahak', 'Other Indigenous'),
+(18, 'Begak', 'Other Indigenous'),
+(19, 'Minokok', 'Other Indigenous'),
+(20, 'Orang Sungai', 'Other Indigenous'),
+(21, 'Tatana', 'Other Indigenous'),
+(22, 'Labuk Kadazan', 'Other Indigenous'),
+(23, 'Bonggi', 'Other Indigenous'),
+(24, 'Sibutu', 'Other Indigenous'),
+(25, 'Cocos Malay', 'Other Indigenous'),
+(26, 'Chinese', 'Non-Indigenous'),
+(27, 'Indian', 'Non-Indigenous'),
+(28, 'Malay (Peninsular)', 'Non-Indigenous'),
+(29, 'Bugis', 'Non-Indigenous'),
+(30, 'Javanese', 'Non-Indigenous'),
+(31, 'Timorese', 'Non-Indigenous'),
+(32, 'Toraja', 'Non-Indigenous'),
+(33, 'Filipino', 'Non-Indigenous'),
+(34, 'Pakistani', 'Non-Indigenous'),
+(35, 'Arab', 'Non-Indigenous');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -280,6 +423,13 @@ CREATE TABLE `user_employment` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `user_employment`
+--
+
+INSERT INTO `user_employment` (`id`, `user_id`, `company`, `job_title`, `department`, `start_date`, `end_date`, `is_current`, `responsibilities`, `updated_at`) VALUES
+(1, 1, 'Google inc', 'Engineer', '', NULL, NULL, 1, '', '2025-07-26 05:18:41');
+
 -- --------------------------------------------------------
 
 --
@@ -303,6 +453,13 @@ CREATE TABLE `user_profiles` (
   `profile_pic_url` varchar(2083) DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_profiles`
+--
+
+INSERT INTO `user_profiles` (`id`, `user_id`, `full_name`, `gender`, `ethnic`, `phone`, `birthday`, `address1`, `address2`, `area`, `postal_code`, `city`, `state`, `profile_pic_url`, `updated_at`) VALUES
+(1, 1, 'MOHD MAZLAN 2', 'm', '', '', '2025-07-31', '', '', '', '', '', '', 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-07-27 05:52:53');
 
 -- --------------------------------------------------------
 
@@ -406,6 +563,18 @@ ALTER TABLE `likes`
   ADD KEY `content_id` (`content_id`);
 
 --
+-- Indexes for table `sabah_dun_seats`
+--
+ALTER TABLE `sabah_dun_seats`
+  ADD PRIMARY KEY (`code`);
+
+--
+-- Indexes for table `sabah_ethnic_groups`
+--
+ALTER TABLE `sabah_ethnic_groups`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -500,6 +669,12 @@ ALTER TABLE `likes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `sabah_ethnic_groups`
+--
+ALTER TABLE `sabah_ethnic_groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -509,13 +684,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_employment`
 --
 ALTER TABLE `user_employment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_profiles`
 --
 ALTER TABLE `user_profiles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `videos`

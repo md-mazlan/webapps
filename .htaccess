@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# If the requested file or directory exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise, rewrite /something to /index.php?page=something
+RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?page=$1.php [L,QSA]
