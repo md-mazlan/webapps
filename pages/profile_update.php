@@ -1,26 +1,44 @@
 <?php
-// Include the new configuration file first.
-require_once '../php/config.php';
+// File: /webapp/pages/profile_update.php
 
-// Use the centralized user authentication check with an absolute path.
+// 1. SETUP: Include all necessary configuration and class files.
+require_once '../php/config.php';
 require_once ROOT_PATH . '/php/user_auth_check.php';
 
-// If a user is not logged in, redirect them to the login page.
+// Redirect user if not logged in.
 if (!isUserLoggedIn()) {
     header('Location: ' . BASE_URL . '/login.php');
     exit;
 }
 
-// Include necessary classes with absolute paths.
+// Include all required classes.
 require_once ROOT_PATH . '/php/database.php';
 require_once ROOT_PATH . '/php/user.php';
+require_once ROOT_PATH . '/app/models/EthnicGroupManager.php';
+require_once ROOT_PATH . '/app/models/StateManager.php';
 
-// Initialize objects and fetch the user's profile data.
+// 2. INITIALIZATION: Create the database connection and manager objects.
 $database = new Database();
 $db = $database->connect();
+
+if (!$db) {
+    // Display a user-friendly error if the database connection fails.
+    echo "A database error occurred. Please try again later.";
+    exit;
+}
+
+// Initialize User and fetch their profile data.
 $user = new User($db);
 $user_id = $_SESSION['user_id'];
 $profileData = $user->getProfile($user_id);
+
+// Initialize managers for dropdown data.
+$ethnicManager = new EthnicGroupManager($db);
+$stateManager = new StateManager($db);
+
+// 3. DATA FETCHING: Get the lists for the dropdowns.
+$ethnic_groups_by_category = $ethnicManager->getAll(true);
+$states = $stateManager->getAll(); // Use the refactored getAll() method
 ?>
 <div data-script="js/profile_update.js" data-style="css/profile_update.css">
     <main class="page-wrapper">
@@ -67,9 +85,17 @@ $profileData = $user->getProfile($user_id);
                             <div class="form-group">
                                 <label for="ethnic">Ethnic</label>
                                 <select id="ethnic" name="ethnic" class="form-control">
-                                    <option value="">-- Select --</option>
-                                    <option value="m" <?php echo ($profileData['ethnic'] ?? '') === 'm' ? 'selected' : ''; ?>>Male</option>
-                                    <option value="f" <?php echo ($profileData['ethnic'] ?? '') === 'f' ? 'selected' : ''; ?>>Female</option>
+                                    <option value="">-- Please select --</option>
+                                    <?php
+                                    foreach ($ethnic_groups_by_category as $category => $ethnics) {
+                                        echo '<optgroup label="' . htmlspecialchars($category) . '">';
+                                        foreach ($ethnics as $ethnic_group) {
+                                            $selected = (isset($profileData['ethnic']) && $profileData['ethnic'] == $ethnic_group->name) ? 'selected' : '';
+                                            echo '<option value="' . htmlspecialchars($ethnic_group->name) . '" ' . $selected . '>' . htmlspecialchars($ethnic_group->name) . '</option>';
+                                        }
+                                        echo '</optgroup>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -108,7 +134,15 @@ $profileData = $user->getProfile($user_id);
                             </div>
                             <div class="form-group">
                                 <label for="state">State</label>
-                                <input type="text" id="state" name="state" class="form-control" value="<?php echo htmlspecialchars($profileData['state'] ?? ''); ?>">
+                                <select id="state" name="state" class="form-control">
+                                    <option value="">-- Please select a state --</option>
+                                    <?php
+                                    foreach ($states as $state) { // Loop through the State objects
+                                        $selected = (isset($profileData['state']) && $profileData['state'] == $state->name) ? 'selected' : '';
+                                        echo '<option value="' . htmlspecialchars($state->name) . '" ' . $selected . '>' . htmlspecialchars($state->name) . '</option>';
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Personal Info</button>

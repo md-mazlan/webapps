@@ -43,10 +43,7 @@ $profileData = $user->getProfile($user_id);
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="css/mkl_style.css">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
+      
         /* Simple transition for content fade-in */
         #content>* {
             animation: fadeIn 0.5s ease-in-out;
