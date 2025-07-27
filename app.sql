@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 27, 2025 at 08:04 AM
+-- Generation Time: Jul 28, 2025 at 12:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -385,6 +385,39 @@ INSERT INTO `sabah_ethnic_groups` (`id`, `name`, `category`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `states`
+--
+
+CREATE TABLE `states` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `states`
+--
+
+INSERT INTO `states` (`id`, `name`) VALUES
+(1, 'Johor'),
+(2, 'Kedah'),
+(3, 'Kelantan'),
+(17, 'Kuala Lumpur'),
+(5, 'Labuan'),
+(6, 'Melaka'),
+(7, 'Negeri Sembilan'),
+(8, 'Pahang'),
+(9, 'Penang'),
+(10, 'Perak'),
+(11, 'Perlis'),
+(12, 'Putrajaya'),
+(13, 'Sabah'),
+(14, 'Sarawak'),
+(15, 'Selangor'),
+(16, 'Terengganu');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -459,7 +492,7 @@ CREATE TABLE `user_profiles` (
 --
 
 INSERT INTO `user_profiles` (`id`, `user_id`, `full_name`, `gender`, `ethnic`, `phone`, `birthday`, `address1`, `address2`, `area`, `postal_code`, `city`, `state`, `profile_pic_url`, `updated_at`) VALUES
-(1, 1, 'MOHD MAZLAN 2', 'm', '', '', '2025-07-31', '', '', '', '', '', '', 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-07-27 05:52:53');
+(1, 1, 'MOHD MAZLAN', 'm', 'Irranun', '', '2025-07-31', '', '', '', '', '', 'Sabah', 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-07-27 08:50:55');
 
 -- --------------------------------------------------------
 
@@ -575,6 +608,13 @@ ALTER TABLE `sabah_ethnic_groups`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `states`
+--
+ALTER TABLE `states`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -675,10 +715,16 @@ ALTER TABLE `sabah_ethnic_groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
+-- AUTO_INCREMENT for table `states`
+--
+ALTER TABLE `states`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_employment`
