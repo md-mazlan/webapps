@@ -198,7 +198,7 @@ if (!isUserLoggedIn()) {
             personalForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
-                formData.append('action', 'insert_personal_info');
+                formData.append('action', 'update_personal_info');
 
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
@@ -216,7 +216,7 @@ if (!isUserLoggedIn()) {
             employmentForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
-                formData.append('action', 'insert_employment_info');
+                formData.append('action', 'update_employment_info');
 
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
@@ -226,7 +226,7 @@ if (!isUserLoggedIn()) {
 
                 if (result.status === 'success') {
                     alert('Profile setup complete!');
-                    window.location.href = 'index.php'; // Redirect to homepage
+                    window.location.href = 'dashboard'; // Redirect to homepage
                 } else {
                     alert(result.message || 'An error occurred.');
                 }

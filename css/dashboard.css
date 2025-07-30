@@ -1,156 +1,276 @@
- .dashboard-news-container {
-     max-width: 1200px;
-     margin: 200px auto;
-     padding: 0 24px;
- }
+:root {
+    --bg-color: #f9fafb;
+    --text-color: #111827;
+    --subtle-text-color: #6b7280;
+    --border-color: #e5e7eb;
+    --card-bg-color: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --primary-color: #2563eb;
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Lora', serif;
+}
 
- .dashboard-header {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     margin-bottom: 24px;
- }
 
- .dashboard-header h1 {
-     font-size: 2.2em;
-     font-weight: 700;
-     color: #222;
-     margin: 0;
- }
+.dark-mode {
+    --bg-color: #111827;
+    --text-color: #f3f4f6;
+    --subtle-text-color: #9ca3af;
+    --border-color: #374151;
+    --card-bg-color: #1f2937;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --primary-color: #3b82f6;
+}
 
- .dashboard-header .weather {
-     font-size: 1.1em;
-     color: #666;
-     display: flex;
-     align-items: center;
-     gap: 8px;
- }
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+}
 
- .news-main-grid {
-     display: grid;
-     grid-template-columns: 2fr 1fr;
-     gap: 32px;
- }
+.navbar {
+    background-color: var(--card-bg-color);
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
 
- .main-news {
-     background: #fff;
-     border-radius: 12px;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-     overflow: hidden;
-     margin-bottom: 24px;
- }
+.navbar a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+}
 
- .main-news img {
-     width: 100%;
-     height: 260px;
-     object-fit: cover;
-     display: block;
- }
+.page-wrapper {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
 
- .main-news-content {
-     padding: 20px 24px;
- }
+.page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
- .main-news-content h2 {
-     font-size: 1.6em;
-     margin: 0 0 10px 0;
-     color: #1a237e;
-     font-weight: 600;
- }
+.page-header h1 {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+}
 
- .main-news-content p {
-     color: #444;
-     font-size: 1.08em;
-     margin-bottom: 0;
- }
+.filter-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
 
- .side-news-list {
-     display: flex;
-     flex-direction: column;
-     gap: 18px;
- }
+.filter-nav a {
+    text-decoration: none;
+    color: var(--subtle-text-color);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+}
 
- .side-news-item {
-     display: flex;
-     gap: 14px;
-     background: #fff;
-     border-radius: 8px;
-     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-     overflow: hidden;
-     transition: box-shadow 0.2s;
- }
+.filter-nav a:hover {
+    color: var(--primary-color);
+    background-color: #eef2ff;
+}
 
- .side-news-item:hover {
-     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.09);
- }
+.filter-nav a.active {
+    color: var(--primary-color);
+    background-color: #dbeafe;
+    font-weight: 600;
+}
 
- .side-news-thumb {
-     width: 90px;
-     height: 70px;
-     object-fit: cover;
-     flex-shrink: 0;
- }
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
 
- .side-news-content {
-     padding: 10px 12px 10px 0;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
- }
+.card {
+    background-color: var(--card-bg-color);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
 
- .side-news-content h4 {
-     margin: 0 0 4px 0;
-     font-size: 1.08em;
-     color: #222;
-     font-weight: 500;
- }
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
 
- .side-news-content span {
-     font-size: 0.95em;
-     color: #888;
- }
+.card a {
+    text-decoration: none;
+}
 
- @media (max-width: 768px) {
-     .news-main-grid {
-         grid-template-columns: 1fr;
-     }
+.card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
 
-     .dashboard-news-container {
-         margin: 100px auto;
-     }
+.card-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+    color: var(--text-color);
+}
 
- }
+.card-title:hover {
+    color: var(--primary-color);
+}
 
- body.dark-mode .dashboard-header h1 {
-     color: #fff;
- }
+.card-meta {
+    font-size: 0.875rem;
+    color: var(--subtle-text-color);
+}
 
- body.dark-mode .dashboard-header .weather {
-     color: #b0b0b0;
- }
+.card-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--subtle-text-color);
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
 
- body.dark-mode .main-news {
-     background: #23243a;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
- }
+.card-stats svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.25rem;
+    vertical-align: middle;
+}
 
- body.dark-mode .main-news-content h2 {
-     color: #b3b8ff;
- }
+.card-excerpt {
+    font-size: 0.9rem;
+    color: var(--subtle-text-color);
+    line-height: 1.6;
+    margin-top: 0.75rem;
+}
 
- body.dark-mode .main-news-content p {
-     color: #d1d1e0;
- }
+.card-article .card-footer {
+    padding: 1rem 1.5rem;
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--border-color);
+}
 
- body.dark-mode .side-news-item {
-     background: #23243a;
-     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
- }
+.card-article .card-footer a {
+    font-weight: 500;
+    color: var(--primary-color);
+}
 
- body.dark-mode .side-news-content h4 {
-     color: #fff;
- }
+.card-event .card-img-top {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background-color: var(--border-color);
+}
 
- body.dark-mode .side-news-content span {
-     color: #b0b0b0;
- }
+.card-event .event-date {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.card-gallery {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-gallery .card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.card-gallery:hover .card-background {
+    transform: scale(1.05);
+}
+
+.card-gallery .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    color: white;
+}
+
+.card-gallery:hover .card-overlay {
+    opacity: 1;
+}
+
+.card-gallery .card-stats {
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.card-video .card-thumbnail {
+    position: relative;
+}
+
+.card-video .card-thumbnail img {
+    width: 100%;
+    display: block;
+    background-color: #000;
+}
+
+.card-video .card-body {
+    display: flex;
+}
+
+.card-video .card-title {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+    gap: 0.5rem;
+}
+
+.page-link {
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    background-color: #dbeafe;
+    border-color: var(--primary-color);
+}
+
+.page-link.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    cursor: default;
+}

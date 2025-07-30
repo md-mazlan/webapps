@@ -1,7 +1,8 @@
 <?php
 // Include necessary classes from the 'php' folder.
-require_once 'php/database.php';
-require_once 'php/content.php';
+require_once 'php/config.php';
+require_once ROOT_PATH . '/php/database.php';
+require_once ROOT_PATH . '/php/content.php';
 
 // --- Filter and Pagination Logic ---
 $database = new Database();
@@ -341,7 +342,7 @@ function create_excerpt($text, $length = 150)
 
 <body>
     <nav class="navbar">
-        <a href="contents.php">My Website</a>
+        <a href="<?php echo BASE_URL; ?>/index.php">My Website</a>
     </nav>
 
     <main class="page-wrapper">
@@ -391,7 +392,7 @@ function create_excerpt($text, $length = 150)
                         case 'event': ?>
                             <div class="card card-event">
                                 <a href="view.php?id=<?php echo $item['id']; ?>">
-                                    <img src="<?php echo htmlspecialchars($item['banner_url'] ?: 'https://placehold.co/400x225/e0e7ff/3730a3?text=Event'); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" class="card-img-top">
+                                    <img src="<?php echo $item['banner_url'] ? BASE_URL . '/' . htmlspecialchars($item['banner_url']) : htmlspecialchars('https://placehold.co/400x225/e0e7ff/3730a3?text=Event'); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" class="card-img-top">
                                 </a>
                                 <div class="card-body">
                                     <p class="card-meta event-date"><?php echo date('D, M j, Y', strtotime($item['event_date'])); ?></p>
@@ -413,7 +414,7 @@ function create_excerpt($text, $length = 150)
                         <?php
                         case 'gallery': ?>
                             <a href="view.php?id=<?php echo $item['id']; ?>" class="card card-gallery">
-                                <img src="<?php echo htmlspecialchars($item['gallery_thumbnail'] ?: 'https://placehold.co/400x400/fef3c7/92400e?text=Gallery'); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" class="card-background">
+                                <img src="<?php echo BASE_URL . '/' . htmlspecialchars($item['gallery_thumbnail'] ?: 'https://placehold.co/400x400/fef3c7/92400e?text=Gallery'); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" class="card-background">
                                 <div class="card-overlay">
                                     <div class="card-stats">
                                         <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
