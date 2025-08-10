@@ -1,0 +1,244 @@
+/* css/mkl_style.css */
+
+/* ==========================================================================
+   1. FONT IMPORTS & ROOT VARIABLES
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Montserrat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Root variables for easy color switching */
+:root {
+    --font-primary: 'Inter', 'Quicksand', sans-serif;
+    --sidebar-bg-light: #fff;
+    --sidebar-bg-dark: #23243a;
+    --sidebar-accent: #6373ff;
+    --sidebar-text-light: #23243a;
+    --sidebar-text-dark: #fff;
+    --sidebar-icon-light: #a0a3bd;
+    --sidebar-icon-dark: #a0a3bd;
+    --sidebar-active-bg-light: #f5f4ff;
+    --sidebar-active-bg-dark: #353657;
+    --sidebar-active-text: var(--sidebar-accent);
+    --sidebar-border-radius: 18px;
+}
+
+* {
+    font-family: var(--font-primary);
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+body {
+    background: #e6e5eb;
+}
+
+#sidebar {
+    width: 270px;
+    height: calc(100vh - 60px);
+    background-color: var(--sidebar-bg-light);
+    box-shadow: 0 4px 24px rgba(99, 115, 255, 0.12);
+    color: var(--sidebar-text-light);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 1001;
+    transition: transform 0.3s cubic-bezier(0.49, 0.55, 0, 1.04);
+    /* Sidebar is visible by default on desktop */
+    transform: translateX(0);
+}
+
+body.dark-mode #sidebar {
+    background: var(--sidebar-bg-dark);
+    color: var(--sidebar-text-dark);
+}
+
+#content {
+    margin-top: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s cubic-bezier(0.49, 0.55, 0, 1.04);
+    /* Add margin to account for the sidebar on desktop */
+    margin-left: 270px;
+}
+
+/* --- Mobile Styles --- */
+@media (max-width: 768px) {
+    #sidebar {
+        /* Hide sidebar off-screen on mobile */
+        transform: translateX(-100%);
+    }
+
+    #sidebar.open {
+        /* Show sidebar when it has the .open class on mobile */
+        transform: translateX(0);
+    }
+
+    #content {
+        /* Full width content on mobile */
+        margin-left: 0;
+    }
+
+    .menu-toggle {
+        display: inline-block;
+        /* Show toggle button on mobile */
+    }
+}
+
+/* --- Other styles (remain mostly the same) --- */
+.sidebar-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0 24px 0;
+    border-bottom: 1.5px solid #f0f0f0;
+    margin-bottom: 10px;
+}
+
+body.dark-mode .sidebar-profile {
+    border-bottom-color: #353657;
+}
+
+.sidebar-profile-name {
+    font-weight: 700;
+    font-size: 1.08em;
+}
+
+.sidebar-profile-email {
+    color: var(--sidebar-icon-light);
+    font-size: 0.9em;
+}
+
+.sidebar-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0;
+}
+
+#sidebar .menu-item {
+    padding: 14px 32px;
+    text-decoration: none;
+    font-size: 1.08em;
+    color: var(--sidebar-icon-light);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: background 0.15s, color 0.15s;
+}
+
+#sidebar .menu-item:hover {
+    background: var(--sidebar-active-bg-light);
+    color: var(--sidebar-accent);
+}
+
+body.dark-mode #sidebar .menu-item:hover {
+    background: var(--sidebar-active-bg-dark);
+}
+
+#sidebar .menu-item.active {
+    background: var(--sidebar-active-bg-light);
+    color: var(--sidebar-accent);
+}
+
+body.dark-mode #sidebar .menu-item.active {
+    background: var(--sidebar-active-bg-dark);
+}
+
+.menu-item .fa {
+    font-size: 1.2em;
+    min-width: 20px;
+    text-align: center;
+}
+
+#toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #002b7f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1002;
+}
+
+#toolbar-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#toolbar-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+#toolbar-actions a {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.menu-toggle {
+    display: none;
+    /* Hidden by default, shown in media query */
+    position: relative;
+    width: 35px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.menu-toggle div {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    height: 4px;
+    background-color: #e2e2e2;
+    border-radius: 2px;
+    transition: 0.4s ease;
+}
+
+.menu-toggle div::before,
+.menu-toggle div::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: #e2e2e2;
+    border-radius: 2px;
+    transition: 0.4s ease;
+    left: 0;
+}
+
+.menu-toggle div::before {
+    top: -10px;
+}
+
+.menu-toggle div::after {
+    bottom: -10px;
+}
+
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1000;
+}
+
+#overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
