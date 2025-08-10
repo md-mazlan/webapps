@@ -30,7 +30,7 @@ if ($user->login()) {
 
     // Check if the user's profile is complete to determine the redirect URL
     if ($user->isProfileComplete($user->id)) {
-        $redirect_url = 'index.php'; // Profile is complete, go to homepage
+        $redirect_url = 'dashboard'; // Profile is complete, go to dashboard
     } else {
         $redirect_url = 'profile_setup.php'; // Profile is incomplete, go to the setup page
     }

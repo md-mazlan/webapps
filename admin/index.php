@@ -226,7 +226,7 @@ if (isAdminLoggedIn()) {
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
-            <p class="form-footer">
+            <p class="form-footer" style="display:none">
                 Need an account? <a href="#" id="show-register" class="form-link">Register here</a>
             </p>
         </div>

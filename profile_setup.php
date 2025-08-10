@@ -1,12 +1,42 @@
 <?php
-// This is the new user onboarding page.
+// 1. SETUP: Include all necessary configuration and class files.
 require_once 'php/config.php';
 require_once ROOT_PATH . '/php/user_auth_check.php';
 
+// Redirect user if not logged in.
 if (!isUserLoggedIn()) {
     header('Location: ' . BASE_URL . '/login.php');
     exit;
 }
+
+// Include all required classes.
+require_once ROOT_PATH . '/php/database.php';
+require_once ROOT_PATH . '/php/user.php';
+require_once ROOT_PATH . '/app/models/EthnicGroupManager.php';
+require_once ROOT_PATH . '/app/models/StateManager.php';
+
+// 2. INITIALIZATION: Create the database connection and manager objects.
+$database = new Database();
+$db = $database->connect();
+
+if (!$db) {
+    // Display a user-friendly error if the database connection fails.
+    echo "A database error occurred. Please try again later.";
+    exit;
+}
+
+// Initialize User and fetch their profile data.
+$user = new User($db);
+$user_id = $_SESSION['user_id'];
+$profileData = $user->getProfile($user_id);
+
+// Initialize managers for dropdown data.
+$ethnicManager = new EthnicGroupManager($db);
+$stateManager = new StateManager($db);
+
+// 3. DATA FETCHING: Get the lists for the dropdowns.
+$ethnic_groups_by_category = $ethnicManager->getAll(true);
+$states = $stateManager->getAll(); // Use the refactored getAll() method
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -150,8 +180,48 @@ if (!isUserLoggedIn()) {
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="ethnic">Ethnic</label>
+                        <select id="ethnic" name="ethnic" class="form-control">
+                            <option value="">-- Please select --</option>
+                            <?php
+                            foreach ($ethnic_groups_by_category as $category => $ethnics) {
+                                echo '<optgroup label="' . htmlspecialchars($category) . '">';
+                                foreach ($ethnics as $ethnic_group) {
+                                    $selected = (isset($profileData['ethnic']) && $profileData['ethnic'] == $ethnic_group->name) ? 'selected' : '';
+                                    echo '<option value="' . htmlspecialchars($ethnic_group->name) . '" ' . $selected . '>' . htmlspecialchars($ethnic_group->name) . '</option>';
+                                }
+                                echo '</optgroup>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" id="phone" name="phone" class="form-control" value="<?php echo htmlspecialchars($profileData['phone'] ?? ''); ?>">
+                    </div>
+                    <div class="form-group">
                         <label for="birthday">Birthday</label>
-                        <input type="date" id="birthday" name="birthday" class="form-control">
+                        <input type="date" id="birthday" name="birthday" class="form-control" value="<?php echo htmlspecialchars($profileData['birthday'] ?? ''); ?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address1">Address 1</label>
+                    <input type="text" id="address1" name="address1" class="form-control" value="<?php echo htmlspecialchars($profileData['address1'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="address2">Address 2</label>
+                    <input type="text" id="address2" name="address2" class="form-control" value="<?php echo htmlspecialchars($profileData['address2'] ?? ''); ?>">
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="area">Area</label>
+                        <input type="text" id="area" name="area" class="form-control" value="<?php echo htmlspecialchars($profileData['area'] ?? ''); ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="postal_code">Postal Code</label>
+                        <input type="text" id="postal_code" name="postal_code" class="form-control" value="<?php echo htmlspecialchars($profileData['postal_code'] ?? ''); ?>">
                     </div>
                 </div>
                 <div class="wizard-footer">

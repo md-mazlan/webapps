@@ -22,10 +22,15 @@ $user->email = $data->email;
 $user->nric = $data->nric;
 $user->password = $data->password;
 
-if ($user->register()) {
-    http_response_code(201);
-    echo json_encode(['message' => 'User was successfully created.']);
-} else {
+try {
+    if ($user->register()) {
+        http_response_code(201);
+        echo json_encode(['message' => 'User was successfully created.']);
+    } else {
+        http_response_code(409);
+        echo json_encode(['message' => 'Unable to create user. Email or NRIC may already exist, or NRIC was not a valid number.']);
+    }
+} catch (Exception $e) {
     http_response_code(409);
-    echo json_encode(['message' => 'Unable to create user. Email or NRIC may already exist, or NRIC was not a valid number.']);
+    echo json_encode(['message' => 'An error occurred while processing your request.', 'error' => $e->getMessage()]);
 }

@@ -129,7 +129,7 @@ $profileData = $user->getProfile($user_id);
             </div>
 
             <footer>
-                <p>&copy; 2024 Dynamic Web App</p>
+                <p>&copy; 2025 Skuad Anak Sabah</p>
             </footer>
         </div>
 

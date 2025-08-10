@@ -14,73 +14,73 @@
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status success">● Success</span></td>
             </tr>
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status success">● Success</span></td>
             </tr>
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status success">● Success</span></td>
             </tr>
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status failed">● Failed</span></td>
             </tr>
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status failed">● Failed</span></td>
             </tr>
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status success">● Success</span></td>
             </tr>
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status success">● Success</span></td>
             </tr>
             <tr>
                 <td data-label="Date">22/06/23 08:08</td>
                 <td data-label="Subscription package">
-                    Monthly<br><span class="sub-amount">NGN 2,500</span>
+                    Monthly<br><span class="sub-amount">MYR 50</span>
                 </td>
                 <td data-label="Payment method">Card payment</td>
-                <td data-label="Amount">₦2,500.00</td>
+                <td data-label="Amount">RM50.00</td>
                 <td data-label="Status"><span class="status success">● Success</span></td>
             </tr>
         </tbody>

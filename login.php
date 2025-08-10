@@ -633,120 +633,49 @@ if (isUserLoggedIn()) {
                 return;
             }
 
+            let jsonData = [];
             try {
-                const response = await fetch(REGISTER_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-                const result = await response.json();
-                if (response.status === 201) {
-                    showMessage('Success! Please sign in.');
-                    setTimeout(() => {
-                        signInButton.click(); // Switch back to the sign-in panel
-                        document.getElementById('login-identifier').value = data.nric;
-                        document.getElementById('login-password').focus(); // Focus on password field
-                        showMessage('Registration successful! Please log in.');
-                    }, 2000);
-                } else {
-                    showMessage(result.message || 'An error occurred.', true);
-                }
+                jsonData = JSON.stringify(data);
             } catch (error) {
-                showMessage('An unexpected error occurred.', true);
+                console.error('Error stringifying data:', error);
+            }
+            // Use XMLHttpRequest instead of fetch
+            try {
+                console.log({ data: jsonData });
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', REGISTER_ENDPOINT, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        let result = {};
+                        console.log(xhr.responseText);
+                        try {
+                            result = JSON.parse(xhr.responseText);
+                        } catch (err) {
+                            result = { message: 'Invalid server response.' };
+                        }
+                        if (xhr.status === 201) {
+                            showMessage('Success! Please sign in.');
+                            setTimeout(function() {
+                                signInButton.click(); // Switch back to the sign-in panel
+                                document.getElementById('login-identifier').value = data.nric;
+                                document.getElementById('login-password').focus(); // Focus on password field
+                                showMessage('Registration successful! Please log in.');
+                            }, 2000);
+                        } else {
+                            showMessage(result.message || 'An error occurred.', true);
+                        }
+                    }
+                };
+                xhr.onerror = function() {
+                    showMessage('Network error occurred.', true);
+                };
+                xhr.send(JSON.stringify(data));
+            } catch (error) {
+                console.error('Submission error:', error);
+                showMessage(error.message || error || 'An unexpected error occurred.', true);
             }
         });
-        // const handleFormSubmit = async (e) => {
-        //     e.preventDefault();
-        //     const form = e.target;
-        //     const formType = form.id === 'register-form' ? 'register' : 'login';
-        //     const formData = new FormData(form);
-        //     const data = Object.fromEntries(formData.entries());
-        //     if (formType === 'login') {
-        //         console.log('Simulating login with:', data);
-        //         showMessage('Login successful!');
-        //     } else if (formType === 'register') {
-        //         data['nric'] = data['nric'].replace(/\D/g, ''); // Ensure NRIC contains only numbers
-        //         const nricInput = document.getElementById('register-nric');
-        //         if (!/^[0-9]+$/.test(data.nric)) {
-        //             showMessage('NRIC must contain only numbers.', true);
-        //             nricInput.focus();
-        //             return;
-        //         }
-        //         if (data.password.length < 6) {
-        //             showMessage('Password must be at least 6 characters long.', true);
-        //             return;
-        //         }
-        //         for (const key in data) {
-        //             if (!data[key]) {
-        //                 showMessage(`Please fill out the ${key.replace('-', ' ')} field.`, true);
-        //                 return;
-        //             }
-        //         }
-        //         if (formType === 'register' && data.password !== data['retype-password']) {
-        //             showMessage('Passwords do not match.', true);
-        //             return;
-        //         }
-
-        //         const submitButton = form.querySelector('button[type="submit"]');
-        //         const originalButtonText = submitButton.textContent;
-        //         submitButton.textContent = 'Submitting...';
-        //         submitButton.disabled = true;
-
-        //         try {
-        //             const response = await fetch(REGISTER_ENDPOINT, {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'Content-Type': 'application/json'
-        //                 },
-        //                 body: JSON.stringify(data)
-        //             });
-        //             const result = await response.json();
-        //             if (response.status === 201) {
-        //                 showMessage('Success! Please sign in.');
-        //                 setTimeout(() => {
-        //                     signInButton.click(); // Switch back to the sign-in panel
-        //                     document.getElementById('login-identifier').value = data.nric; // Pre-fill NRIC in login form
-        //                     document.getElementById('login-password').focus(); // Focus on password field
-        //                     showMessage('Registration successful! Please log in.');
-        //                 }, 2000);
-        //             } else {
-        //                 showMessage(result.message || 'An error occurred.', true);
-        //             }
-        //         } catch (error) {
-        //             showMessage('An unexpected error occurred.', true);
-        //         }
-        //     }
-
-
-        //     try {
-        //         await new Promise(resolve => setTimeout(resolve, 1500));
-
-        //         if (formType === 'login') {
-
-        //         } else {
-
-
-        //             // console.log('Simulating registration with:', data);
-        //             // showMessage('Registration successful! Please sign in.');
-        //             // setTimeout(() => {
-        //             //     container.classList.remove("right-panel-active");
-        //             // }, 1000);
-        //         }
-        //         form.reset();
-
-        //     } catch (error) {
-        //         console.error('Submission error:', error);
-        //         showMessage(error.message || 'An unexpected error occurred.', true);
-        //     } finally {
-        //         submitButton.textContent = originalButtonText;
-        //         submitButton.disabled = false;
-        //     }
-        // };
-
-        // loginForm.addEventListener('submit', handleFormSubmit);
-        // registerForm.addEventListener('submit', handleFormSubmit);
     </script>
 </body>
 

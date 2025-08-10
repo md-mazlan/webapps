@@ -7,7 +7,7 @@ require_once '../php/config.php';
 if (isset($_GET['lang'])) {
     $_SESSION['lang'] = $_GET['lang'];
 }
-$lang_code = $_SESSION['lang'] ?? 'my';
+$lang_code = $_SESSION['lang'] ?? 'en';
 
 require_once ROOT_PATH . "/lang/lang_{$lang_code}.php";
 
@@ -58,7 +58,7 @@ $profileData = $user->getProfile($user_id);
                 <div class="profile-details">
                     <div>
                         <label>User ID / NRIC:</label>
-                        <span><?php echo $user_id; ?></span>
+                        <span><?php echo $profileData['nric'] ?? ''; ?></span>
                     </div>
                     <div>
                         <label><?php echo $lang['full_name']; ?>:</label>
