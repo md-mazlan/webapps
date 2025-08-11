@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 28, 2025 at 12:51 AM
+-- Generation Time: Aug 10, 2025 at 04:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -65,7 +65,8 @@ CREATE TABLE `admin_tokens` (
 --
 
 INSERT INTO `admin_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_at`, `last_used_at`, `ip_address`, `device_info`, `location`) VALUES
-(4, 1, 'd9c598b0394a0b42117136d720eaca1c94e7bcd33cff8a4b334c6468d09575cc', '2025-08-22 04:38:09', '2025-07-23 10:38:09', '2025-07-23 10:38:09', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL);
+(4, 1, 'd9c598b0394a0b42117136d720eaca1c94e7bcd33cff8a4b334c6468d09575cc', '2025-08-22 04:38:09', '2025-07-23 10:38:09', '2025-07-23 10:38:09', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL),
+(6, 1, '6d6d6ae07bb836f092fd182a910cb5ba6526dbe4467488bbbb28603de85e50bd', '2025-09-08 16:03:06', '2025-08-09 22:03:06', '2025-08-09 22:03:06', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL);
 
 -- --------------------------------------------------------
 
@@ -435,7 +436,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nric`, `email`, `username`, `password`, `created_at`) VALUES
-(1, '971009126139', 'mazlan97@live.com', 'mazlan', '$2y$10$FViyRRCuK8ZqC5PHAig.Se91YAiA50nXp4QDtlN.kU27bD2al4S5q', '2025-07-24 18:57:44');
+(1, '971009126139', 'mazlan97@live.com', 'mazlan', '$2y$10$FViyRRCuK8ZqC5PHAig.Se91YAiA50nXp4QDtlN.kU27bD2al4S5q', '2025-07-24 18:57:44'),
+(9, '971009136139', 'mazlan3@live.com', '', '$2y$10$LKSBOo0J01FEwPbeMZ8PQunCmxCv79Wbd1PvW1w8WsS66Xsh7GSGy', '2025-08-07 22:15:01'),
+(27, '971009146139', 'mazlan4@live.com', 'Mazlan', '$2y$10$EYIF.ulISIjPEpF3enJL2eYADbrzO5S/uOuuHd5sZl.Ui7w3W.s8W', '2025-08-07 22:45:53'),
+(28, '971009156139', 'mazlan5@live.com', 'mazlan', '$2y$10$v60g9Any4BZBYA86U8AO5ODFo1VXvHsaDRhNd0CD.cit4n9DcAGd.', '2025-08-07 23:18:01');
 
 -- --------------------------------------------------------
 
@@ -461,7 +465,10 @@ CREATE TABLE `user_employment` (
 --
 
 INSERT INTO `user_employment` (`id`, `user_id`, `company`, `job_title`, `department`, `start_date`, `end_date`, `is_current`, `responsibilities`, `updated_at`) VALUES
-(1, 1, 'Google inc', 'Engineer', '', NULL, NULL, 1, '', '2025-07-26 05:18:41');
+(1, 1, 'Company', 'Job Title', '', NULL, NULL, 1, '', '2025-08-08 22:26:19'),
+(2, 9, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-08-07 14:15:01'),
+(3, 27, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-08-07 14:45:53'),
+(4, 28, NULL, NULL, '', NULL, NULL, 0, '', '2025-08-08 13:44:38');
 
 -- --------------------------------------------------------
 
@@ -492,7 +499,10 @@ CREATE TABLE `user_profiles` (
 --
 
 INSERT INTO `user_profiles` (`id`, `user_id`, `full_name`, `gender`, `ethnic`, `phone`, `birthday`, `address1`, `address2`, `area`, `postal_code`, `city`, `state`, `profile_pic_url`, `updated_at`) VALUES
-(1, 1, 'MOHD MAZLAN', 'm', 'Irranun', '', '2025-07-31', '', '', '', '', '', 'Sabah', 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-07-27 08:50:55');
+(1, 1, 'MOHD MAZLAN', 'm', 'Irranun', '', '2025-07-31', '', '', '', '', '', 'Sabah', 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-07-27 08:50:55'),
+(2, 9, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-07 14:15:01'),
+(3, 27, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-07 14:45:53'),
+(4, 28, 'MOHD MAZLAN', 'm', '', '', NULL, 'ASD', 'ASD', '', '123', '', '', NULL, '2025-08-08 22:24:11');
 
 -- --------------------------------------------------------
 
@@ -620,8 +630,7 @@ ALTER TABLE `states`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nric` (`nric`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `user_employment`
@@ -658,7 +667,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `admin_tokens`
 --
 ALTER TABLE `admin_tokens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `articles`
@@ -724,19 +733,19 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `user_employment`
 --
 ALTER TABLE `user_employment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_profiles`
 --
 ALTER TABLE `user_profiles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `videos`

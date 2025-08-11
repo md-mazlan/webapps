@@ -111,8 +111,7 @@ body.dark-mode .status.failed {
     padding: 12px;
     background-color: #fafafa;
   }
-
-  td {
+  .dark-mode td {
     border: none;
     display: flex;
     flex-direction: row;
@@ -132,5 +131,20 @@ body.dark-mode .status.failed {
     display: block;
     color: #888;
     font-size: 13px;
+  }
+
+  
+  .dark-mode tr {
+    background-color: #23243a;
+  }
+  
+
+  .dark-mode td::before {
+    color: #EEE;
+  }
+  
+
+  .dark-mode  td::before {
+    color: #EEE;
   }
 }

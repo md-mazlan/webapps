@@ -67,101 +67,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 // 4. FETCH ALL DATA FOR DISPLAY
 $all_ethnics = $ethnicManager->getAll();
 
+include_once 'admin_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="dashboard-wrapper">
+    <div class="header">
+        <h1>Manage Ethnic Groups</h1>
+        <!-- <a href="index.php" class="btn btn-secondary">Back to Dashboard</a> -->
+    </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Ethnic Groups</title>
-    <!-- Using a CDN for Bootstrap for quick styling -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+    <?php if ($message): ?><div class="message success"><?= htmlspecialchars($message) ?></div><?php endif; ?>
+    <?php if ($error): ?><div class="message error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
 
-<body>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Manage Ethnic Groups</h1>
-            <!-- You can link this back to your main admin dashboard -->
-            <!-- <a href="index.php" class="btn btn-secondary">Back to Dashboard</a> -->
+    <!-- Add/Edit Form Card -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title"><?= $editing_ethnic ? 'Edit Ethnic Group' : 'Add New Ethnic Group' ?></span>
         </div>
-
-        <?php if ($message): ?><div class="alert alert-success"><?= htmlspecialchars($message) ?></div><?php endif; ?>
-        <?php if ($error): ?><div class="alert alert-danger"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-
-        <!-- Add/Edit Form Card -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0"><?= $editing_ethnic ? 'Edit Ethnic Group' : 'Add New Ethnic Group' ?></h5>
-            </div>
-            <div class="card-body">
-                <form action="ethnic_groups.php" method="POST">
-                    <input type="hidden" name="action" value="<?= $editing_ethnic ? 'update' : 'create' ?>">
-                    <?php if ($editing_ethnic): ?>
-                        <input type="hidden" name="id" value="<?= $editing_ethnic->id ?>">
-                    <?php endif; ?>
-                    <div class="form-row">
-                        <div class="form-group col-md-5">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($editing_ethnic->name ?? '') ?>" required>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label for="category">Category</label>
-                            <input type="text" class="form-control" id="category" name="category" value="<?= htmlspecialchars($editing_ethnic->category ?? '') ?>" placeholder="e.g., Major, Non-Indigenous" required>
-                        </div>
-                        <div class="form-group col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary btn-block"><?= $editing_ethnic ? 'Update Group' : 'Add Group' ?></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- List of Existing Ethnic Groups Card -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Existing Ethnic Groups</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($all_ethnics)): ?>
-                                <tr>
-                                    <td colspan="4" class="text-center">No ethnic groups found.</td>
-                                </tr>
-                            <?php else: ?>
-                                <?php foreach ($all_ethnics as $ethnic): ?>
-                                    <tr>
-                                        <td><?= $ethnic->id ?></td>
-                                        <td><?= htmlspecialchars($ethnic->name) ?></td>
-                                        <td><?= htmlspecialchars($ethnic->category) ?></td>
-                                        <td class="text-right">
-                                            <a href="ethnic_groups.php?action=edit&id=<?= $ethnic->id ?>" class="btn btn-sm btn-warning">Edit</a>
-                                            <form action="ethnic_groups.php" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                                <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="id" value="<?= $ethnic->id ?>">
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+        <div class="card-body">
+            <form action="ethnic_groups.php" method="POST">
+                <input type="hidden" name="action" value="<?= $editing_ethnic ? 'update' : 'create' ?>">
+                <?php if ($editing_ethnic): ?>
+                    <input type="hidden" name="id" value="<?= $editing_ethnic->id ?>">
+                <?php endif; ?>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($editing_ethnic->name ?? '') ?>" required>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category" value="<?= htmlspecialchars($editing_ethnic->category ?? '') ?>" placeholder="e.g., Major, Non-Indigenous" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%"><?= $editing_ethnic ? 'Update Group' : 'Add Group' ?></button>
+            </form>
         </div>
     </div>
-</body>
 
-</html>
+    <!-- List of Existing Ethnic Groups Card -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">Existing Ethnic Groups</span>
+        </div>
+        <div class="card-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($all_ethnics)): ?>
+                        <tr>
+                            <td colspan="4" style="text-align:center;">No ethnic groups found.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($all_ethnics as $ethnic): ?>
+                            <tr>
+                                <td><?= $ethnic->id ?></td>
+                                <td><?= htmlspecialchars($ethnic->name) ?></td>
+                                <td><?= htmlspecialchars($ethnic->category) ?></td>
+                                <td>
+                                    <a href="ethnic_groups.php?action=edit&id=<?= $ethnic->id ?>" class="btn btn-secondary">Edit</a>
+                                    <form action="ethnic_groups.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="<?= $ethnic->id ?>">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php include_once 'admin_footer.php'; ?>

@@ -66,93 +66,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 // 4. FETCH ALL DATA FOR DISPLAY
 $all_states = $stateManager->getAll();
 
+include_once 'admin_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<div class="dashboard-wrapper">
+    <div class="header">
+        <h1>Manage States</h1>
+        <!-- <a href="index.php" class="btn btn-secondary">Back to Dashboard</a> -->
+    </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage States</title>
-    <!-- Using a CDN for Bootstrap for quick styling -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+    <?php if ($message): ?><div class="message success"><?= htmlspecialchars($message) ?></div><?php endif; ?>
+    <?php if ($error): ?><div class="message error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
 
-<body>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Manage States</h1>
-            <!-- You can link this back to your main admin dashboard -->
-            <!-- <a href="index.php" class="btn btn-secondary">Back to Dashboard</a> -->
+    <!-- Add/Edit Form Card -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title"><?= $editing_state ? 'Edit State' : 'Add New State' ?></span>
         </div>
-
-        <?php if ($message): ?><div class="alert alert-success"><?= htmlspecialchars($message) ?></div><?php endif; ?>
-        <?php if ($error): ?><div class="alert alert-danger"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-
-        <!-- Add/Edit Form Card -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0"><?= $editing_state ? 'Edit State' : 'Add New State' ?></h5>
-            </div>
-            <div class="card-body">
-                <form action="states.php" method="POST">
-                    <input type="hidden" name="action" value="<?= $editing_state ? 'update' : 'create' ?>">
-                    <?php if ($editing_state): ?><input type="hidden" name="id" value="<?= $editing_state->id ?>"><?php endif; ?>
-                    <div class="form-row">
-                        <div class="form-group col-md-10">
-                            <label for="name">State Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($editing_state->name ?? '') ?>" required>
-                        </div>
-                        <div class="form-group col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary btn-block"><?= $editing_state ? 'Update State' : 'Add State' ?></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- List of Existing States Card -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Existing States</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($all_states)): ?>
-                                <tr>
-                                    <td colspan="3" class="text-center">No states found.</td>
-                                </tr>
-                            <?php else: ?>
-                                <?php foreach ($all_states as $state): ?>
-                                    <tr>
-                                        <td><?= $state->id ?></td>
-                                        <td><?= htmlspecialchars($state->name) ?></td>
-                                        <td class="text-right">
-                                            <a href="states.php?action=edit&id=<?= $state->id ?>" class="btn btn-sm btn-warning">Edit</a>
-                                            <form action="states.php" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                                <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="id" value="<?= $state->id ?>">
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+        <div class="card-body">
+            <form action="states.php" method="POST">
+                <input type="hidden" name="action" value="<?= $editing_state ? 'update' : 'create' ?>">
+                <?php if ($editing_state): ?><input type="hidden" name="id" value="<?= $editing_state->id ?>"><?php endif; ?>
+                <div class="form-group">
+                    <label for="name">State Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($editing_state->name ?? '') ?>" required>
                 </div>
-            </div>
+                <button type="submit" class="btn btn-primary" style="width:100%"><?= $editing_state ? 'Update State' : 'Add State' ?></button>
+            </form>
         </div>
     </div>
-</body>
 
-</html>
+    <!-- List of Existing States Card -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">Existing States</span>
+        </div>
+        <div class="card-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($all_states)): ?>
+                        <tr>
+                            <td colspan="3" style="text-align:center;">No states found.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($all_states as $state): ?>
+                            <tr>
+                                <td><?= $state->id ?></td>
+                                <td><?= htmlspecialchars($state->name) ?></td>
+                                <td>
+                                    <a href="states.php?action=edit&id=<?= $state->id ?>" class="btn btn-secondary">Edit</a>
+                                    <form action="states.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="<?= $state->id ?>">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php include_once 'admin_footer.php'; ?>
