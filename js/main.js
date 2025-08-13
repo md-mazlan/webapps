@@ -33,6 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Find the main element of the newly loaded content
             const newContentElement = contentContainer.firstElementChild;
+            
+            
+            // Handle multiple styles
+            if (newContentElement && newContentElement.dataset.style) {
+                const styleHrefs = newContentElement.dataset.style.split(',').map(s => s.trim());
+                loadStyles(styleHrefs);
+            } else {
+                removeCurrentStyles();
+            }
 
             // Handle multiple scripts
             if (newContentElement && newContentElement.dataset.script) {
@@ -40,14 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadScripts(scriptSrcs);
             } else {
                 removeCurrentScripts();
-            }
-
-            // Handle multiple styles
-            if (newContentElement && newContentElement.dataset.style) {
-                const styleHrefs = newContentElement.dataset.style.split(',').map(s => s.trim());
-                loadStyles(styleHrefs);
-            } else {
-                removeCurrentStyles();
             }
 
         } catch (error) {

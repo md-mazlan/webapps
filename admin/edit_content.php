@@ -113,8 +113,7 @@ if (!$contentData) {
                             <label for="article_body">Body</label>
                             <textarea name="article_body" id="article_body" rows="10" class="form-control"><?php echo htmlspecialchars($contentData['body']); ?></textarea>
                         </div>
-                        <?php break; ?>
-                    <?php
+                    <?php break;
                     case 'event': ?>
                         <div class="form-group">
                             <label for="event_description">Description</label>
@@ -124,15 +123,13 @@ if (!$contentData) {
                             <label for="event_date">Event Date & Time</label>
                             <input type="datetime-local" name="event_date" id="event_date" class="form-control" value="<?php echo date('Y-m-d\TH:i', strtotime($contentData['event_date'])); ?>">
                         </div>
-                        <?php break; ?>
-                    <?php
+                    <?php break;
                     case 'gallery': ?>
                         <div class="form-group">
                             <label for="gallery_description">Description</label>
                             <textarea name="gallery_description" id="gallery_description" rows="5" class="form-control"><?php echo htmlspecialchars($contentData['description']); ?></textarea>
                         </div>
-                        <?php break; ?>
-                    <?php
+                    <?php break;
                     case 'video': ?>
                         <div class="form-group">
                             <label for="video_embedded_src">Embedded Video URL</label>
@@ -150,8 +147,8 @@ if (!$contentData) {
                             <label for="video_uploaded_description">Uploaded Video Description</label>
                             <textarea name="video_uploaded_description" id="video_uploaded_description" rows="2" class="form-control"><?php echo htmlspecialchars($contentData['uploaded_description']); ?></textarea>
                         </div>
-                        <?php break; ?>
-                <?php endswitch; ?>
+                <?php break;
+                endswitch; ?>
 
                 <button type="submit" name="update_content" class="btn btn-primary">Save Changes</button>
             </form>

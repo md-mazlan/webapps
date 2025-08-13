@@ -43,7 +43,6 @@ $profileData = $user->getProfile($user_id);
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="css/mkl_style.css">
     <style>
-      
         /* Simple transition for content fade-in */
         #content>* {
             animation: fadeIn 0.5s ease-in-out;
@@ -110,7 +109,7 @@ $profileData = $user->getProfile($user_id);
                     <a href="profile_update" class="menu-item nav-link" data-section="am-roles"><?php echo $lang['update'] ?></a>
                 </div>
             </label>
-
+            <a href="payment_history" class="menu-item nav-link"> <i class="fa fa-inbox"></i> Inbox</a>
             <a href="payment_history" class="menu-item nav-link"> <i class="fa fa-money"></i> <?php echo $lang['payment_history'] ?></a>
         </div>
 

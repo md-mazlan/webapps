@@ -131,6 +131,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
 
+        case 'update_ekyc_info':
+            // Handle EKYC info (profile_pic, ic_front, ic_back, ekyc_verified)
+            $ekyc_verified = isset($_POST['ekyc_verified']) ? 1 : 0;
+            // You can add file upload handling here for profile_pic, ic_front, ic_back
+            // For now, just return success for demo purposes
+            $response = [
+                'status' => 'success',
+                'message' => 'EKYC info updated successfully!',
+                'ekyc_verified' => $ekyc_verified
+            ];
+            break;
+
         case 'update_profile_picture':
             if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
                 $updateResult = $user->updateProfilePicture($user_id, $_FILES['profile_pic']);

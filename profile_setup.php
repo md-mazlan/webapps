@@ -171,6 +171,10 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                     <label for="full_name">Full Name</label>
                     <input type="text" id="full_name" name="full_name" class="form-control" required>
                 </div>
+                <div class="form-group">
+                    <label for="nric">NRIC</label>
+                    <input type="text" id="nric" name="nric" class="form-control" required>
+                </div>
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="gender">Gender</label>
@@ -198,31 +202,54 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="text" id="phone" name="phone" class="form-control" value="<?php echo htmlspecialchars($profileData['phone'] ?? ''); ?>">
-                    </div>
-                    <div class="form-group">
                         <label for="birthday">Birthday</label>
-                        <input type="date" id="birthday" name="birthday" class="form-control" value="<?php echo htmlspecialchars($profileData['birthday'] ?? ''); ?>">
+                        <input type="date" id="birthday" name="birthday" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">No Phone</label>
+                        <input type="text" id="phone" name="phone" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="address1">Address 1</label>
-                    <input type="text" id="address1" name="address1" class="form-control" value="<?php echo htmlspecialchars($profileData['address1'] ?? ''); ?>">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label for="address2">Address 2</label>
-                    <input type="text" id="address2" name="address2" class="form-control" value="<?php echo htmlspecialchars($profileData['address2'] ?? ''); ?>">
+                    <label for="address1">Latest Address</label>
+                    <input type="text" id="address1" name="address1" class="form-control">
                 </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="area">Area</label>
-                        <input type="text" id="area" name="area" class="form-control" value="<?php echo htmlspecialchars($profileData['area'] ?? ''); ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="postal_code">Postal Code</label>
-                        <input type="text" id="postal_code" name="postal_code" class="form-control" value="<?php echo htmlspecialchars($profileData['postal_code'] ?? ''); ?>">
-                    </div>
+                <div class="form-group">
+                    <label for="voting_area">Voting Area</label>
+                    <select id="voting_area" name="voting_area" class="form-control">
+                        <option value="">-- Please select --</option>
+                        <?php foreach ($states as $state): ?>
+                            <option value="<?php echo htmlspecialchars($state->name); ?>"><?php echo htmlspecialchars($state->name); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="membership">Membership</label>
+                    <input type="text" id="membership" name="membership" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="service_area">Service Area</label>
+                    <select id="service_area" name="service_area" class="form-control">
+                        <option value="">-- Please select --</option>
+                        <?php foreach ($states as $state): ?>
+                            <option value="<?php echo htmlspecialchars($state->name); ?>"><?php echo htmlspecialchars($state->name); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vest_size">Vest Size</label>
+                    <select id="vest_size" name="vest_size" class="form-control">
+                        <option value="">-- Please select --</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="XXXL">XXXL</option>
+                    </select>
                 </div>
                 <div class="wizard-footer">
                     <button type="submit" class="btn btn-primary">Next &rarr;</button>
@@ -234,27 +261,87 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
             <h2>Step 2: Employment Details</h2>
             <form id="employment-form">
                 <div class="form-group">
-                    <label for="company">Company</label>
-                    <input type="text" id="company" name="company" class="form-control">
+                    <label for="employment">Employment</label>
+                    <select id="employment" name="employment" class="form-control">
+                        <option value="">-- Please select --</option>
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                        <option value="Business">Business</option>
+                        <option value="Unemployment">Unemployment</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="job_title">Job Title</label>
-                    <input type="text" id="job_title" name="job_title" class="form-control">
+                    <label for="position">Position</label>
+                    <input type="text" id="position" name="position" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="employer_name">Employer Name</label>
+                    <input type="text" id="employer_name" name="employer_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="company_address">Company Address</label>
+                    <input type="text" id="company_address" name="company_address" class="form-control">
                 </div>
                 <div class="wizard-footer">
                     <button type="button" class="btn btn-secondary" data-prev-step="1">&larr; Previous</button>
-                    <button type="submit" class="btn btn-primary">Finish &rarr;</button>
+                    <button type="submit" class="btn btn-primary">Next &rarr;</button>
                 </div>
             </form>
         </div>
+        <div id="step3" class="wizard-step">
+            <h2>Step 3: EKYC Verification</h2>
+            <form id="ekyc-form">
+                <div class="form-group">
+                    <label for="profile_pic">Upload Profile Picture</label>
+                    <input type="file" id="profile_pic" name="profile_pic" class="form-control" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="ic_front">Upload IC (Front)</label>
+                    <input type="file" id="ic_front" name="ic_front" class="form-control" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="ic_back">Upload IC (Back)</label>
+                    <input type="file" id="ic_back" name="ic_back" class="form-control" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>EKYC Verification</label>
+                    <input type="checkbox" id="ekyc_verified" name="ekyc_verified"> I have completed EKYC verification
+                </div>
+                <div class="wizard-footer">
+                    <button type="button" class="btn btn-secondary" data-prev-step="2">&larr; Previous</button>
+                    <button type="submit" class="btn btn-primary">Next &rarr;</button>
+                </div>
+            </form>
+        </div>
+        <div id="step4" class="wizard-step">
+            <h2>Step 4: Success & Payment</h2>
+            <div class="form-group">
+                <label>Membership Application No</label>
+                <input type="text" class="form-control" value="<?php echo uniqid('MEM'); ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label>Payment</label>
+                <form method="post" action="billplzpost.php">
+                    <input type="hidden" name="name" value="<?php echo htmlspecialchars($profileData['full_name'] ?? ''); ?>">
+                    <input type="hidden" name="email" value="<?php echo htmlspecialchars($profileData['email'] ?? ''); ?>">
+                    <input type="hidden" name="mobile" value="<?php echo htmlspecialchars($profileData['phone'] ?? ''); ?>">
+                    <input type="hidden" name="amount" value="100"> <!-- RM1.00 in cents -->
+                    <input type="hidden" name="description" value="Membership Payment">
+                    <input type="submit" class="btn btn-primary" value="Pay with Billplz">
+                </form>
+            </div>
+            <div class="wizard-footer">
+                <button type="button" class="btn btn-secondary" data-prev-step="3">&larr; Previous</button>
+            </div>
+        </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const steps = document.querySelectorAll('.wizard-step');
             const personalForm = document.getElementById('personal-form');
             const employmentForm = document.getElementById('employment-form');
-            const prevButton = document.querySelector('[data-prev-step]');
+            const ekycForm = document.getElementById('ekyc-form');
+            const prevButtons = document.querySelectorAll('[data-prev-step]');
 
             const API_ENDPOINT = '<?php echo BASE_URL; ?>/api/profile_actions.php';
 
@@ -263,7 +350,13 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                 document.getElementById(`step${stepNumber}`).classList.add('active');
             }
 
-            prevButton.addEventListener('click', () => goToStep(1));
+            // Handle all previous buttons
+            prevButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const prevStep = this.getAttribute('data-prev-step');
+                    goToStep(prevStep);
+                });
+            });
 
             personalForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -295,12 +388,31 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    alert('Profile setup complete!');
-                    window.location.href = 'dashboard'; // Redirect to homepage
+                    goToStep(3);
                 } else {
                     alert(result.message || 'An error occurred.');
                 }
             });
+
+            if (ekycForm) {
+                ekycForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+                    formData.append('action', 'update_ekyc_info');
+
+                    const response = await fetch(API_ENDPOINT, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        goToStep(4);
+                    } else {
+                        alert(result.message || 'An error occurred.');
+                    }
+                });
+            }
         });
     </script>
 </body>
