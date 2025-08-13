@@ -173,7 +173,7 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                 </div>
                 <div class="form-group">
                     <label for="nric">NRIC</label>
-                    <input type="text" id="nric" name="nric" class="form-control" required>
+                    <input type="text" id="nric" name="nric" class="form-control" value="<?php echo $profileData['nric'] ?>" readonly>
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
@@ -216,7 +216,7 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                 </div>
                 <div class="form-group">
                     <label for="address1">Latest Address</label>
-                    <input type="text" id="address1" name="address1" class="form-control">
+                    <textarea type="text" id="address1" name="address1" class="form-control" style="resize: vertical;"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="voting_area">Voting Area</label>
@@ -227,10 +227,8 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="membership">Membership</label>
-                    <input type="text" id="membership" name="membership" class="form-control">
-                </div>
+
+                <h2>Membership</h2>
                 <div class="form-group">
                     <label for="service_area">Service Area</label>
                     <select id="service_area" name="service_area" class="form-control">
@@ -245,7 +243,7 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                     <select id="vest_size" name="vest_size" class="form-control">
                         <option value="">-- Please select --</option>
                         <option value="M">M</option>
-                        <option value="L">L</option>
+                        <option value="L">L</option> 
                         <option value="XL">XL</option>
                         <option value="XXL">XXL</option>
                         <option value="XXXL">XXXL</option>

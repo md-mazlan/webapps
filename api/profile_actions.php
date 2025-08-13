@@ -67,7 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'area' => htmlspecialchars(strip_tags($_POST['area'] ?? '')),
                 'postal_code' => htmlspecialchars(strip_tags($_POST['postal_code'] ?? '')),
                 'city' => htmlspecialchars(strip_tags($_POST['city'] ?? '')),
-                'state' => htmlspecialchars(strip_tags($_POST['state'] ?? ''))
+                'state' => htmlspecialchars(strip_tags($_POST['state'] ?? '')),
+                'voting_area' => htmlspecialchars(strip_tags($_POST['voting_area'] ?? '')),
+                'service_area' => htmlspecialchars(strip_tags($_POST['service_area'] ?? '')),
+                'vest_size' => htmlspecialchars(strip_tags($_POST['vest_size'] ?? ''))
             ];
             if ($user->insertPersonalInfo($user_id, $data)) {
                 $response = ['status' => 'success', 'message' => 'Personal info inserted successfully!'];
@@ -78,13 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'insert_employment_info':
             $data = [
-                'company' => htmlspecialchars(strip_tags($_POST['company'] ?? '')),
-                'job_title' => htmlspecialchars(strip_tags($_POST['job_title'] ?? '')),
-                'department' => htmlspecialchars(strip_tags($_POST['department'] ?? '')),
-                'start_date' => !empty($_POST['start_date']) ? $_POST['start_date'] : null,
-                'end_date' => !empty($_POST['end_date']) ? $_POST['end_date'] : null,
-                'is_current' => isset($_POST['is_current']) ? 1 : 0,
-                'responsibilities' => htmlspecialchars(strip_tags($_POST['responsibilities'] ?? ''))
+                'employment' => htmlspecialchars(strip_tags($_POST['employment'] ?? '')),
+                'position' => htmlspecialchars(strip_tags($_POST['position'] ?? '')),
+                'employer_name' => htmlspecialchars(strip_tags($_POST['employer_name'] ?? '')),
+                'company_address' => htmlspecialchars(strip_tags($_POST['company_address'] ?? ''))
             ];
             if ($user->insertEmploymentInfo($user_id, $data)) {
                 $response = ['status' => 'success', 'message' => 'Employment details inserted successfully!'];
@@ -105,7 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'area' => htmlspecialchars(strip_tags($_POST['area'] ?? '')),
                 'postal_code' => htmlspecialchars(strip_tags($_POST['postal_code'] ?? '')),
                 'city' => htmlspecialchars(strip_tags($_POST['city'] ?? '')),
-                'state' => htmlspecialchars(strip_tags($_POST['state'] ?? ''))
+                'voting_area' => htmlspecialchars(strip_tags($_POST['voting_area'] ?? '')),
+                'service_area' => htmlspecialchars(strip_tags($_POST['service_area'] ?? '')),
+                'vest_size' => htmlspecialchars(strip_tags($_POST['vest_size'] ?? ''))
             ];
             if ($user->updatePersonalInfo($user_id, $data)) {
                 $response = ['status' => 'success', 'message' => 'Personal info updated successfully!'];
@@ -116,13 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'update_employment_info':
             $data = [
-                'company' => htmlspecialchars(strip_tags($_POST['company'] ?? '')),
-                'job_title' => htmlspecialchars(strip_tags($_POST['job_title'] ?? '')),
-                'department' => htmlspecialchars(strip_tags($_POST['department'] ?? '')),
-                'start_date' => !empty($_POST['start_date']) ? $_POST['start_date'] : null,
-                'end_date' => !empty($_POST['end_date']) ? $_POST['end_date'] : null,
-                'is_current' => isset($_POST['is_current']) ? 1 : 0,
-                'responsibilities' => htmlspecialchars(strip_tags($_POST['responsibilities'] ?? ''))
+                'employment' => htmlspecialchars(strip_tags($_POST['employment'] ?? '')),
+                'position' => htmlspecialchars(strip_tags($_POST['position'] ?? '')),
+                'employer_name' => htmlspecialchars(strip_tags($_POST['employer_name'] ?? '')),
+                'company_address' => htmlspecialchars(strip_tags($_POST['company_address'] ?? ''))
             ];
             if ($user->updateEmploymentInfo($user_id, $data)) {
                 $response = ['status' => 'success', 'message' => 'Employment details updated successfully!'];

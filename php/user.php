@@ -166,7 +166,7 @@ class User
 
     public function insertPersonalInfo($user_id, $data)
     {
-        $query = 'INSERT INTO ' . $this->profiles_table . ' (user_id, full_name, gender, ethnic, phone, birthday, address1, address2, area, postal_code, city, state) VALUES (:user_id, :full_name, :gender, :ethnic, :phone, :birthday, :address1, :address2, :area, :postal_code, :city, :state)';
+        $query = 'INSERT INTO ' . $this->profiles_table . ' (user_id, full_name, gender, ethnic, phone, birthday, address1, address2, area, postal_code, city, state, voting_area, service_area, vest_size) VALUES (:user_id, :full_name, :gender, :ethnic, :phone, :birthday, :address1, :address2, :area, :postal_code, :city, :state, :voting_area, :service_area, :vest_size)';
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':full_name', $data['full_name']);
@@ -180,33 +180,31 @@ class User
         $stmt->bindParam(':postal_code', $data['postal_code']);
         $stmt->bindParam(':city', $data['city']);
         $stmt->bindParam(':state', $data['state']);
+        $stmt->bindParam(':voting_area', $data['voting_area']);
+        $stmt->bindParam(':service_area', $data['service_area']);
+        $stmt->bindParam(':vest_size', $data['vest_size']);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         return $stmt->execute();
     }
 
     public function insertEmploymentInfo($user_id, $data)
     {
-        $query = 'INSERT INTO ' . $this->employment_table . ' (user_id, company, job_title, department, start_date, end_date, is_current, responsibilities) VALUES (:user_id, :company, :job_title, :department, :start_date, :end_date, :is_current, :responsibilities)';
+        $query = 'INSERT INTO ' . $this->employment_table . ' (user_id, employment, position, employer_name, company_address) VALUES (:user_id, :employment, :position, :employer_name, :company_address)';
         $stmt = $this->conn->prepare($query);
-        $is_current = isset($data['is_current']) ? 1 : 0;
-        $end_date = $is_current ? null : $data['end_date'];
-        $stmt->bindParam(':company', $data['company']);
-        $stmt->bindParam(':job_title', $data['job_title']);
-        $stmt->bindParam(':department', $data['department']);
-        $stmt->bindParam(':start_date', $data['start_date']);
-        $stmt->bindParam(':end_date', $end_date);
-        $stmt->bindParam(':is_current', $is_current, PDO::PARAM_INT);
-        $stmt->bindParam(':responsibilities', $data['responsibilities']);
+        $stmt->bindParam(':employment', $data['employment']);
+        $stmt->bindParam(':position', $data['position']);
+        $stmt->bindParam(':employer_name', $data['employer_name']);
+        $stmt->bindParam(':company_address', $data['company_address']);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         return $stmt->execute();
     }
-
     public function updatePersonalInfo($user_id, $data)
     {
         $query = "UPDATE " . $this->profiles_table . " SET 
             full_name = :full_name, gender = :gender, ethnic = :ethnic, phone = :phone, 
             birthday = :birthday, address1 = :address1, address2 = :address2, area = :area, 
-            postal_code = :postal_code, city = :city, state = :state 
+            postal_code = :postal_code, city = :city, state = :state, voting_area = :voting_area, 
+            service_area = :service_area, vest_size = :vest_size
             WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':full_name', $data['full_name']);
@@ -220,6 +218,9 @@ class User
         $stmt->bindParam(':postal_code', $data['postal_code']);
         $stmt->bindParam(':city', $data['city']);
         $stmt->bindParam(':state', $data['state']);
+        $stmt->bindParam(':voting_area', $data['voting_area']);
+        $stmt->bindParam(':service_area', $data['service_area']);
+        $stmt->bindParam(':vest_size', $data['vest_size']);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         return $stmt->execute();
     }
@@ -227,20 +228,14 @@ class User
     public function updateEmploymentInfo($user_id, $data)
     {
         $query = "UPDATE " . $this->employment_table . " SET 
-            company = :company, job_title = :job_title, department = :department, 
-            start_date = :start_date, end_date = :end_date, is_current = :is_current, 
-            responsibilities = :responsibilities 
+            employment = :employment, position = :position, employer_name = :employer_name, 
+            company_address = :company_address
             WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
-        $is_current = isset($data['is_current']) ? 1 : 0;
-        $end_date = $is_current ? null : $data['end_date'];
-        $stmt->bindParam(':company', $data['company']);
-        $stmt->bindParam(':job_title', $data['job_title']);
-        $stmt->bindParam(':department', $data['department']);
-        $stmt->bindParam(':start_date', $data['start_date']);
-        $stmt->bindParam(':end_date', $end_date);
-        $stmt->bindParam(':is_current', $is_current, PDO::PARAM_INT);
-        $stmt->bindParam(':responsibilities', $data['responsibilities']);
+        $stmt->bindParam(':employment', $data['employment']);
+        $stmt->bindParam(':position', $data['position']);
+        $stmt->bindParam(':employer_name', $data['employer_name']);
+        $stmt->bindParam(':company_address', $data['company_address']);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         return $stmt->execute();
     }
