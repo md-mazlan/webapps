@@ -11,7 +11,6 @@ class DunSeat
     public $seat;
     /**
      * Constructor to initialize the object with a database connection.
-     * @param mysqli $conn The database connection object.
      * @param string|null $code The DUN seat code (e.g., 'N01').
      * @param string|null $seat The DUN seat name (e.g., 'Banggi').
      */

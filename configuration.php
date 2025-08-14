@@ -1,4 +1,5 @@
 <?php
+require_once 'php/config.php';
 /**
  * Instruction:
  *
@@ -17,10 +18,10 @@ $collection_id = 'u121pgx5';
 $x_signature = 'd2a0cafef9b99b1d7c3c6bf962a64fa7fb6e1a35ec756c694ecb5add868a6f5f8cdec020e1c5f42f94ef4d788c8089941a664197749687384afff99574a099d7';
 $is_sandbox = true;
 
-$websiteurl = 'http://www.google.com';
-$successpath = 'http://www.google.com/success.html';
+$websiteurl = ROOT_PATH;
+$successpath = ROOT_PATH.'/billplz_callback.php';
 $amount = ''; //Example (RM13.50): $amount = '1350';
-$fallbackurl = ''; //Example: $fallbackurl = 'http://www.google.com/pay.php';
+$fallbackurl = ROOT_PATH.'/billplz_callback.php'; //Example: $fallbackurl = 'http://www.google.com/pay.php';
 $description = 'PAYMENT DESCRIPTION';
 $reference_1_label = '';
 $reference_2_label = '';

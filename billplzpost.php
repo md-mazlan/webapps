@@ -1,8 +1,8 @@
 <?php
-
-require 'lib/API.php';
-require 'lib/Connect.php';
-require 'configuration.php';
+// Include the new configuration file first.
+require_once 'lib/API.php';
+require_once 'lib/Connect.php';
+require_once 'configuration.php';
 
 use Billplz\Minisite\API;
 use Billplz\Minisite\Connect;
@@ -42,18 +42,20 @@ list ($rheader, $rbody) = $billplz->toArray($billplz->createBill($parameter, $op
 // Include tracking code here
 /***********************************************/
 
-$is_debug = defined('DEBUG') || (bool) $debug;
+var_dump($rheader, $rbody); // Debugging output
+exit;
+// $is_debug = defined('DEBUG') || (bool) $debug;
 
-if ($rheader !== 200) {
-    if ($is_debug) {
-        echo '<pre>'.print_r($rbody, true).'</pre>';
-    } elseif (!empty($fallbackurl)) {
-        header('Location: ' . $fallbackurl);
-        exit;
-    }
-}
+// if ($rheader !== 200) {
+//     if ($is_debug) {
+//         echo '<pre>'.print_r($rbody, true).'</pre>';
+//     } elseif (!empty($fallbackurl)) {
+//         header('Location: ' . $fallbackurl);
+//         exit;
+//     }
+// }
 
-if (isset($rbody['url'])) {
-    header('Location: ' . $rbody['url']);
-    exit;
-}
+// if (isset($rbody['url'])) {
+//     header('Location: ' . $rbody['url']);
+//     exit;
+// }

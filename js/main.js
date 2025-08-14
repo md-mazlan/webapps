@@ -28,20 +28,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const html = await response.text();
 
-            // Inject the new content
-            contentContainer.innerHTML = html;
+            // Create a temporary container to parse the HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
 
             // Find the main element of the newly loaded content
-            const newContentElement = contentContainer.firstElementChild;
-            
-            
-            // Handle multiple styles
+            const newContentElement = tempDiv.firstElementChild;
+
+            // Handle multiple styles before injecting content
             if (newContentElement && newContentElement.dataset.style) {
                 const styleHrefs = newContentElement.dataset.style.split(',').map(s => s.trim());
                 loadStyles(styleHrefs);
             } else {
                 removeCurrentStyles();
             }
+
+            // Inject the new content after styles are loaded
+            contentContainer.innerHTML = html;
 
             // Handle multiple scripts
             if (newContentElement && newContentElement.dataset.script) {

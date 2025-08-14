@@ -46,7 +46,7 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
         <div class="profile-grid">
             <!-- Left Column: Profile Picture -->
             <div class="card profile-pic-container">
-                <img id="profile-pic-img" src="<?php echo empty($profileData['profile_pic_url']) ?  'https://placehold.co/150x150/e0e7ff/3730a3?text=User' : BASE_URL . '/' . htmlspecialchars($profileData['profile_pic_url']); ?>" alt="Profile Picture" class="profile-pic">
+                <img id="profile-pic-img" src="<?php echo htmlspecialchars($_SESSION['profile_pic_url'] ?? 'https://placehold.co/32x32/e0e7ff/3730a3?text=U'); ?>" alt="Profile Picture" class="profile-pic">
                 <h3 style="margin-bottom: 0.5rem;"><?php echo htmlspecialchars($profileData['username']); ?></h3>
                 <p style="color: var(--subtle-text-color); margin-top: 0;"><?php echo htmlspecialchars($profileData['email']); ?></p>
                 <form id="profile-pic-form">
