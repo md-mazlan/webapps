@@ -14,6 +14,7 @@ require_once ROOT_PATH . '/php/database.php';
 require_once ROOT_PATH . '/php/user.php';
 require_once ROOT_PATH . '/app/models/EthnicGroupManager.php';
 require_once ROOT_PATH . '/app/models/StateManager.php';
+require_once ROOT_PATH . '/app/models/DunSeatManager.php';
 
 // 2. INITIALIZATION: Create the database connection and manager objects.
 $database = new Database();
@@ -33,10 +34,12 @@ $profileData = $user->getProfile($user_id);
 // Initialize managers for dropdown data.
 $ethnicManager = new EthnicGroupManager($db);
 $stateManager = new StateManager($db);
+$dunSeatManager = new DunSeatManager($db);
 
 // 3. DATA FETCHING: Get the lists for the dropdowns.
 $ethnic_groups_by_category = $ethnicManager->getAll(true);
 $states = $stateManager->getAll(); // Use the refactored getAll() method
+$dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -222,8 +225,8 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                     <label for="voting_area">Voting Area</label>
                     <select id="voting_area" name="voting_area" class="form-control">
                         <option value="">-- Please select --</option>
-                        <?php foreach ($states as $state): ?>
-                            <option value="<?php echo htmlspecialchars($state->name); ?>"><?php echo htmlspecialchars($state->name); ?></option>
+                        <?php foreach ($dunSeats as $dunSeat): ?>
+                            <option value="<?php echo htmlspecialchars($dunSeat->code); ?>"><?php echo htmlspecialchars($dunSeat->code ." ".$dunSeat->seat); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -233,8 +236,8 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                     <label for="service_area">Service Area</label>
                     <select id="service_area" name="service_area" class="form-control">
                         <option value="">-- Please select --</option>
-                        <?php foreach ($states as $state): ?>
-                            <option value="<?php echo htmlspecialchars($state->name); ?>"><?php echo htmlspecialchars($state->name); ?></option>
+                        <?php foreach ($dunSeats as $dunSeat): ?>
+                            <option value="<?php echo htmlspecialchars($dunSeat->code); ?>"><?php echo htmlspecialchars($dunSeat->code ." ".$dunSeat->seat); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -243,7 +246,7 @@ $states = $stateManager->getAll(); // Use the refactored getAll() method
                     <select id="vest_size" name="vest_size" class="form-control">
                         <option value="">-- Please select --</option>
                         <option value="M">M</option>
-                        <option value="L">L</option> 
+                        <option value="L">L</option>
                         <option value="XL">XL</option>
                         <option value="XXL">XXL</option>
                         <option value="XXXL">XXXL</option>
