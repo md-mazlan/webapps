@@ -1,21 +1,18 @@
-<?php
-// payment_success.php
-// Billplz callback for successful payment
 
-// You may log the successful payment or process the callback data here if needed
-// Example: $billplz_data = $_GET['billplz'] ?? [];
+<?php
+require_once __DIR__ . '/php/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Payment Success</title>
-    <meta http-equiv="refresh" content="10;url=payment_history.php">
+    <meta http-equiv="refresh" content="10;url=<?php echo BASE_URL; ?>/payment_history">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #d4edda;
-            color: #155724;
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f8fafc;
+            color: #222;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -25,18 +22,48 @@
         }
         .container {
             background: #fff;
-            border: 1px solid #c3e6cb;
-            border-radius: 8px;
-            padding: 2rem 3rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 32px rgba(37,99,235,0.10);
+            padding: 2.5rem 2.5rem 2rem 2.5rem;
             text-align: center;
+            min-width: 320px;
+            max-width: 95vw;
         }
-        h1 {
-            color: #218838;
+        .success-icon {
+            width: 70px;
+            height: 70px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            box-shadow: 0 2px 12px rgba(37,99,235,0.12);
+        }
+        .success-icon svg {
+            width: 38px;
+            height: 38px;
+            color: #fff;
+        }
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+        .success-message {
+            font-size: 1.1rem;
+            color: #222;
+            margin-bottom: 1.5rem;
         }
         .redirect {
             margin-top: 1.5rem;
-            color: #856404;
+            color: #6b7280;
+            font-size: 0.98rem;
+        }
+        .redirect a {
+            color: #2563eb;
+            text-decoration: underline;
         }
     </style>
     <script>
@@ -45,7 +72,7 @@
             var timerElem = document.getElementById('timer');
             if (timerElem) timerElem.textContent = seconds;
             if (seconds <= 0) {
-                window.location.href = 'payment_history.php';
+                window.location.href = '<?php echo BASE_URL; ?>/payment_history';
             } else {
                 seconds--;
                 setTimeout(updateTimer, 1000);
@@ -56,83 +83,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>Payment Successful</h1>
-        <p>Your payment was successful. Thank you!</p>
-        <div class="redirect">
-            You will be redirected to your payment history in <span id="timer">10</span> seconds.<br>
-            <a href="payment_history.php">Click here if you are not redirected.</a>
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="12" fill="currentColor" opacity="0.08"/>
+                <path d="M7 13.5L11 17L17 9.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
-    </div>
-</body>
-</html>
-<?php
-// payment_failed.php
-// Billplz callback for failed payment
-
-// You may log the failed payment or process the callback data here if needed
-// Example: $billplz_data = $_GET['billplz'] ?? [];
-
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Payment Failed</title>
-    <meta http-equiv="refresh" content="10;url=payment_history.php">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f8d7da;
-            color: #721c24;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: #fff;
-            border: 1px solid #f5c6cb;
-            border-radius: 8px;
-            padding: 2rem 3rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        h1 {
-            color: #c82333;
-        }
-        .redirect {
-            margin-top: 1.5rem;
-            color: #856404;
-        }
-    </style>
-    <script>
-        setTimeout(function() {
-            window.location.href = '/payment_history';
-        }, 10000);
-    </script>
-</head>
-<body>
-    <div class="container">
-        <h1>Payment Failed</h1>
-        <p>Your payment was not successful or was cancelled.</p>
+        <div class="success-title">Payment Successful</div>
+        <div class="success-message">Your payment was successful. Thank you!</div>
         <div class="redirect">
             You will be redirected to your payment history in <span id="timer">10</span> seconds.<br>
-            <a href="payment_history">Click here if you are not redirected.</a>
-            </div>
-            <script>
-                var seconds = 10;
-                var timerElem = document.getElementById('timer');
-                var countdown = setInterval(function() {
-                    seconds--;
-                    if (timerElem) timerElem.textContent = seconds;
-                    if (seconds <= 0) {
-                        clearInterval(countdown);
-                        window.location.href = 'payment_history';
-                    }
-                }, 1000);
-            </script>
+            <a href="<?php echo BASE_URL; ?>/payment_history">Click here if you are not redirected.</a>
         </div>
     </div>
 </body>

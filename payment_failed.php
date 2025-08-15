@@ -1,17 +1,12 @@
 <?php
-// payment_failed.php
-// Billplz callback for failed payment
-
-// You may log the failed payment or process the callback data here if needed
-// Example: $billplz_data = $_GET['billplz'] ?? [];
-
+require_once __DIR__ . '/php/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Payment Failed</title>
-    <meta http-equiv="refresh" content="10;url=payment_history.php">
+    <meta http-equiv="refresh" content="10;url=<?php echo BASE_URL; ?>/payment_history">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,7 +37,7 @@
     </style>
     <script>
         setTimeout(function() {
-            window.location.href = '/payment_history';
+            window.location.href = '<?php echo BASE_URL; ?>/payment_history';
         }, 10000);
     </script>
 </head>
@@ -52,7 +47,7 @@
         <p>Your payment was not successful or was cancelled.</p>
         <div class="redirect">
             You will be redirected to your payment history in <span id="timer">10</span> seconds.<br>
-            <a href="payment_history">Click here if you are not redirected.</a>
+            <a href="<?php echo BASE_URL; ?>/payment_history">Click here if you are not redirected.</a>
             </div>
             <script>
                 var seconds = 10;
@@ -62,7 +57,7 @@
                     if (timerElem) timerElem.textContent = seconds;
                     if (seconds <= 0) {
                         clearInterval(countdown);
-                        window.location.href = 'payment_history';
+                        window.location.href = '<?php echo BASE_URL; ?>/payment_history';
                     }
                 }, 1000);
             </script>

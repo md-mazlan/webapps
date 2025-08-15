@@ -62,18 +62,18 @@ function create_excerpt($text, $length = 150)
 }
 ?>
 <main class="page-wrapper" data-style="css/dashboard.css">
-    <header class="page-header">
+    <!-- <header class="page-header">
         <h1>Our Latest Content</h1>
-    </header>
+    </header> -->
 
     <!-- Filter Navigation -->
-    <div class="filter-nav">
+    <!-- <div class="filter-nav">
         <a href="contents.php" class="<?php echo !$filter_type ? 'active' : ''; ?>">All</a>
         <a href="contents.php?type=article" class="<?php echo $filter_type == 'article' ? 'active' : ''; ?>">Articles</a>
         <a href="contents.php?type=event" class="<?php echo $filter_type == 'event' ? 'active' : ''; ?>">Events</a>
         <a href="contents.php?type=gallery" class="<?php echo $filter_type == 'gallery' ? 'active' : ''; ?>">Galleries</a>
         <a href="contents.php?type=video" class="<?php echo $filter_type == 'video' ? 'active' : ''; ?>">Videos</a>
-    </div>
+    </div> -->
 
     <?php if (empty($allContent)): ?>
         <p style="text-align: center;">No content found for this category.</p>

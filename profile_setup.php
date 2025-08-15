@@ -12,9 +12,9 @@ if (!isUserLoggedIn()) {
 // Include all required classes.
 require_once ROOT_PATH . '/php/database.php';
 require_once ROOT_PATH . '/php/user.php';
-require_once ROOT_PATH . '/app/models/EthnicGroupManager.php';
-require_once ROOT_PATH . '/app/models/StateManager.php';
-require_once ROOT_PATH . '/app/models/DunSeatManager.php';
+require_once ROOT_PATH . '/app/controllers/EthnicGroupController.php';
+require_once ROOT_PATH . '/app/controllers/StateController.php';
+require_once ROOT_PATH . '/app/controllers/DunSeatController.php';
 
 // 2. INITIALIZATION: Create the database connection and manager objects.
 $database = new Database();
@@ -32,9 +32,9 @@ $user_id = $_SESSION['user_id'];
 $profileData = $user->getProfile($user_id);
 
 // Initialize managers for dropdown data.
-$ethnicManager = new EthnicGroupManager($db);
-$stateManager = new StateManager($db);
-$dunSeatManager = new DunSeatManager($db);
+$ethnicManager = new EthnicGroupController($db);
+$stateManager = new StateController($db);
+$dunSeatManager = new DunSeatController($db);
 
 // 3. DATA FETCHING: Get the lists for the dropdowns.
 $ethnic_groups_by_category = $ethnicManager->getAll(true);
@@ -172,18 +172,18 @@ $dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
             <form id="personal-form">
                 <div class="form-group">
                     <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" class="form-control" required>
+                    <input type="text" id="full_name" name="full_name" class="form-control" required value="<?php echo htmlspecialchars($profileData['full_name'] ?? ''); ?>">
                 </div>
                 <div class="form-group">
                     <label for="nric">NRIC</label>
-                    <input type="text" id="nric" name="nric" class="form-control" value="<?php echo $profileData['nric'] ?>" readonly>
+                    <input type="text" id="nric" name="nric" class="form-control" value="<?php echo $profileData['nric'] ?>" readonly disabled>
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="gender">Gender</label>
                         <select id="gender" name="gender" class="form-control">
-                            <option value="m">Male</option>
-                            <option value="f">Female</option>
+                            <option value="m" <?php echo (isset($profileData['gender']) && $profileData['gender'] == 'm') ? 'selected' : ''; ?>>Male</option>
+                            <option value="f" <?php echo (isset($profileData['gender']) && $profileData['gender'] == 'f') ? 'selected' : ''; ?>>Female</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -206,27 +206,27 @@ $dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="birthday">Birthday</label>
-                        <input type="date" id="birthday" name="birthday" class="form-control">
+                        <input type="date" id="birthday" name="birthday" class="form-control" value="<?php echo htmlspecialchars($profileData['birthday'] ?? ''); ?>">
                     </div>
                     <div class="form-group">
                         <label for="phone">No Phone</label>
-                        <input type="text" id="phone" name="phone" class="form-control">
+                        <input type="text" id="phone" name="phone" class="form-control" value="<?php echo htmlspecialchars($profileData['phone'] ?? ''); ?>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
+                    <input type="email" id="email" name="email" class="form-control" required value="<?php echo htmlspecialchars($profileData['email'] ?? ''); ?>" readonly disabled>
                 </div>
                 <div class="form-group">
                     <label for="address1">Latest Address</label>
-                    <textarea type="text" id="address1" name="address1" class="form-control" style="resize: vertical;"></textarea>
+                    <textarea type="text" id="address1" name="address1" class="form-control" style="resize: vertical;"><?php echo htmlspecialchars($profileData['address1'] ?? ''); ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="voting_area">Voting Area</label>
                     <select id="voting_area" name="voting_area" class="form-control">
                         <option value="">-- Please select --</option>
                         <?php foreach ($dunSeats as $dunSeat): ?>
-                            <option value="<?php echo htmlspecialchars($dunSeat->code); ?>"><?php echo htmlspecialchars($dunSeat->code ." ".$dunSeat->seat); ?></option>
+                            <option value="<?php echo htmlspecialchars($dunSeat->code); ?>" <?php echo (isset($profileData['voting_area']) && $profileData['voting_area'] == $dunSeat->code) ? 'selected' : ''; ?>><?php echo htmlspecialchars($dunSeat->code . " " . $dunSeat->seat); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -237,7 +237,7 @@ $dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
                     <select id="service_area" name="service_area" class="form-control">
                         <option value="">-- Please select --</option>
                         <?php foreach ($dunSeats as $dunSeat): ?>
-                            <option value="<?php echo htmlspecialchars($dunSeat->code); ?>"><?php echo htmlspecialchars($dunSeat->code ." ".$dunSeat->seat); ?></option>
+                            <option value="<?php echo htmlspecialchars($dunSeat->code); ?>" <?php echo (isset($profileData['service_area']) && $profileData['service_area'] == $dunSeat->code) ? 'selected' : ''; ?>><?php echo htmlspecialchars($dunSeat->code . " " . $dunSeat->seat); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -245,14 +245,14 @@ $dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
                     <label for="vest_size">Vest Size</label>
                     <select id="vest_size" name="vest_size" class="form-control">
                         <option value="">-- Please select --</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                        <option value="XXXL">XXXL</option>
+                        <option value="M" <?php echo (isset($profileData['vest_size']) && $profileData['vest_size'] == 'M') ? 'selected' : ''; ?>>M</option>
+                        <option value="L" <?php echo (isset($profileData['vest_size']) && $profileData['vest_size'] == 'L') ? 'selected' : ''; ?>>L</option>
+                        <option value="XL" <?php echo (isset($profileData['vest_size']) && $profileData['vest_size'] == 'XL') ? 'selected' : ''; ?>>XL</option>
+                        <option value="XXL" <?php echo (isset($profileData['vest_size']) && $profileData['vest_size'] == 'XXL') ? 'selected' : ''; ?>>XXL</option>
+                        <option value="XXXL" <?php echo (isset($profileData['vest_size']) && $profileData['vest_size'] == 'XXXL') ? 'selected' : ''; ?>>XXXL</option>
                     </select>
                 </div>
-                <div class="wizard-footer">
+                <div class="wizard-footer" style="justify-content: flex-end;">
                     <button type="submit" class="btn btn-primary">Next &rarr;</button>
                 </div>
             </form>
@@ -265,23 +265,23 @@ $dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
                     <label for="employment">Employment</label>
                     <select id="employment" name="employment" class="form-control">
                         <option value="">-- Please select --</option>
-                        <option value="Public">Public</option>
-                        <option value="Private">Private</option>
-                        <option value="Business">Business</option>
-                        <option value="Unemployment">Unemployment</option>
+                        <option value="Public" <?php echo (isset($profileData['employment']) && $profileData['employment'] == 'Public') ? 'selected' : ''; ?>>Public</option>
+                        <option value="Private" <?php echo (isset($profileData['employment']) && $profileData['employment'] == 'Private') ? 'selected' : ''; ?>>Private</option>
+                        <option value="Business" <?php echo (isset($profileData['employment']) && $profileData['employment'] == 'Business') ? 'selected' : ''; ?>>Business</option>
+                        <option value="Unemployment" <?php echo (isset($profileData['employment']) && $profileData['employment'] == 'Unemployment') ? 'selected' : ''; ?>>Unemployment</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="position">Position</label>
-                    <input type="text" id="position" name="position" class="form-control">
+                    <input type="text" id="position" name="position" class="form-control" value="<?php echo htmlspecialchars($profileData['position'] ?? ''); ?>">
                 </div>
                 <div class="form-group">
                     <label for="employer_name">Employer Name</label>
-                    <input type="text" id="employer_name" name="employer_name" class="form-control">
+                    <input type="text" id="employer_name" name="employer_name" class="form-control" value="<?php echo htmlspecialchars($profileData['employer_name'] ?? ''); ?>">
                 </div>
                 <div class="form-group">
                     <label for="company_address">Company Address</label>
-                    <input type="text" id="company_address" name="company_address" class="form-control">
+                    <input type="text" id="company_address" name="company_address" class="form-control" value="<?php echo htmlspecialchars($profileData['company_address'] ?? ''); ?>">
                 </div>
                 <div class="wizard-footer">
                     <button type="button" class="btn btn-secondary" data-prev-step="1">&larr; Previous</button>
@@ -315,14 +315,12 @@ $dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
             </form>
         </div>
         <div id="step4" class="wizard-step">
-            <h2>Step 4: Success & Payment</h2>
+            <h2>Step 4: Complete</h2>
             <div class="form-group">
-                <label>Membership Application No</label>
-                <input type="text" class="form-control" value="<?php echo uniqid('MEM'); ?>" readonly>
+                <label>All steps are complete. Please proceed to payment to finish your registration.</label>
             </div>
-            <div class="form-group">
-                <label>Payment</label>
-                <form method="post" action="billplzpost.php">
+            <div class="form-group" style="display: flex; justify-content: center;">
+                <form method="post" action="billplzpost.php" style="margin: 0;">
                     <input type="hidden" name="name" value="<?php echo htmlspecialchars($profileData['full_name'] ?? ''); ?>">
                     <input type="hidden" name="email" value="<?php echo htmlspecialchars($profileData['email'] ?? ''); ?>">
                     <input type="hidden" name="mobile" value="<?php echo htmlspecialchars($profileData['phone'] ?? ''); ?>">
@@ -332,7 +330,7 @@ $dunSeats = $dunSeatManager->getAll(); // Fetch all DUN seats
                 </form>
             </div>
             <div class="wizard-footer">
-                <button type="button" class="btn btn-secondary" data-prev-step="3">&larr; Previous</button>
+                <button type="button" class="btn btn-secondary" data-prev-step="3" style="margin-right:auto;">&larr; Previous</button>
             </div>
         </div>
     </div>

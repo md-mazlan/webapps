@@ -20,10 +20,10 @@ $is_sandbox = true;
 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
 $host = $_SERVER['HTTP_HOST'];
-$websiteurl = $protocol . $host;
-$successpath = $websiteurl . '/billplz_callback.php';
+$websiteurl = BASE_URL;
+$successpath = $websiteurl . '/payment_success.php';
 $amount = ''; //Example (RM13.50): $amount = '1350';
-$fallbackurl = $websiteurl . '/billplz_callback.php'; //Example: $fallbackurl = 'http://www.google.com/pay.php';
+$fallbackurl = $websiteurl . '/payment_failed.php'; //Example: $fallbackurl = 'http://www.google.com/pay.php';
 $description = 'PAYMENT DESCRIPTION';
 $reference_1_label = '';
 $reference_2_label = '';

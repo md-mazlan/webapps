@@ -161,7 +161,9 @@ class User
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data["skuad_id"] = "SKUAD" . str_pad($data["id"], 2, "0", STR_PAD_LEFT);
+        return $data;
     }
 
     public function insertPersonalInfo($user_id, $data)

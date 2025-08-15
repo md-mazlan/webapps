@@ -60,6 +60,10 @@ include_once 'admin_header.php';
                 <p>User Management</p>
                 <a href="view_users.php">View All Users &rarr;</a>
             </div>
+            <div class="info-item">
+                <p>Account Deletion Requests</p>
+                <a href="account_deletion_requests.php">View Requests &rarr;</a>
+            </div>
         </div>
     </div>
 

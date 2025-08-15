@@ -249,28 +249,12 @@ if ($content_id) {
 </head>
 
 <body>
-    <nav class="navbar">
-        <a href="<?php echo BASE_URL; ?>/index.php">My Website</a>
-        <div class="nav-links">
-            <?php if ($is_admin_logged_in): ?>
-                <span>Welcome, <?php echo htmlspecialchars($_SESSION['admin_username']); ?>!</span>
-                <a href="<?php echo BASE_URL; ?>/admin/dashboard.php">Admin Dashboard</a>
-                <?php if ($contentData): ?>
-                    <a href="<?php echo BASE_URL; ?>/admin/edit_content.php?id=<?php echo $content_id; ?>" class="admin-link">Edit Content</a>
-                <?php endif; ?>
-            <?php elseif ($is_user_logged_in): ?>
-                <span>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
-                <a href="<?php echo BASE_URL; ?>/profile.php">My Profile</a>
-                <a href="<?php echo BASE_URL; ?>/api/user_logout.php">Logout</a>
-            <?php else: ?>
-                <a href="<?php echo BASE_URL; ?>/login.php">Login / Register</a>
-            <?php endif; ?>
-        </div>
-    </nav>
+    
 
     <main class="content-wrapper">
         <?php if ($contentData): ?>
             <div class="content-card">
+                <a href="<?php echo BASE_URL?>/dashboard" style="display:inline-block;margin-bottom:1.5rem;padding:0.5rem 1.2rem;background:#f3f4f6;color:#2563eb;border-radius:6px;text-decoration:none;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:background 0.2s;">&larr; Back</a>
                 <h1 class="content-title"><?php echo htmlspecialchars($contentData['title']); ?></h1>
                 <p class="meta">
                     Published on <?php echo date('F j, Y', strtotime($contentData['created_at'])); ?>

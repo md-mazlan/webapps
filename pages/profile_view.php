@@ -57,6 +57,10 @@ $profileData = $user->getProfile($user_id);
                 </div>
                 <div class="profile-details">
                     <div>
+                        <label>Membership ID</label>
+                        <span><?php echo $profileData['skuad_id'] ?? ''; ?></span>
+                    </div>
+                    <div>
                         <label>User ID / NRIC:</label>
                         <span><?php echo $profileData['nric'] ?? ''; ?></span>
                     </div>

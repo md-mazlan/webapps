@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2025 at 11:37 PM
+-- Generation Time: Aug 14, 2025 at 01:56 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `app`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_deletion_requests`
+--
+
+CREATE TABLE `account_deletion_requests` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `reason` text NOT NULL,
+  `requested_at` datetime NOT NULL,
+  `reviewed` tinyint(1) DEFAULT 0,
+  `reviewed_at` datetime DEFAULT NULL,
+  `admin_id` int(11) DEFAULT NULL,
+  `decision` varchar(20) DEFAULT NULL,
+  `response` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -104,6 +122,44 @@ CREATE TABLE `auth_tokens` (
   `ip_address` varchar(45) DEFAULT NULL,
   `device_info` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `billplz_payment`
+--
+
+CREATE TABLE `billplz_payment` (
+  `id` varchar(32) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `collection_id` varchar(32) DEFAULT NULL,
+  `paid` tinyint(1) DEFAULT NULL,
+  `state` varchar(20) DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `paid_amount` int(11) DEFAULT NULL,
+  `due_at` date DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `mobile` varchar(30) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `reference_1_label` varchar(100) DEFAULT NULL,
+  `reference_1` varchar(100) DEFAULT NULL,
+  `reference_2_label` varchar(100) DEFAULT NULL,
+  `reference_2` varchar(100) DEFAULT NULL,
+  `redirect_url` varchar(255) DEFAULT NULL,
+  `callback_url` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `paid_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `billplz_payment`
+--
+
+INSERT INTO `billplz_payment` (`id`, `user_id`, `collection_id`, `paid`, `state`, `amount`, `paid_amount`, `due_at`, `email`, `mobile`, `name`, `url`, `reference_1_label`, `reference_1`, `reference_2_label`, `reference_2`, `redirect_url`, `callback_url`, `description`, `paid_at`) VALUES
+('2674cbffa93c327a', 9, 'u121pgx5', 1, 'paid', 100, 100, '2025-08-14', 'mazlan3@live.com', '+60107896572', 'MOHD MAZLAN BIN ABDUL MANAN', 'https://www.billplz-sandbox.com/bills/2674cbffa93c327a', 'Reference 1', NULL, 'Reference 2', NULL, 'http://192.168.0.133/webapps/redirect.php', 'http://192.168.0.133/webapps/callback.php', 'PAYMENT DESCRIPTION', '2025-08-14 15:51:02'),
+('40d06663f17ccbeb', 9, 'u121pgx5', 1, 'paid', 100, 100, '2025-08-14', 'mazlan3@live.com', '+60107896572', 'MOHD MAZLAN BIN ABDUL MANAN', 'https://www.billplz-sandbox.com/bills/40d06663f17ccbeb', 'Reference 1', NULL, 'Reference 2', NULL, 'http://192.168.0.133/webapps/redirect.php', 'http://192.168.0.133/webapps/callback.php', 'PAYMENT DESCRIPTION', '2025-08-14 15:45:26'),
+('82b415f28268f059', 1, 'u121pgx5', 1, 'paid', 100, 100, '2025-08-14', 'mazlan97@live.com', NULL, 'MOHD MAZLAN BIN ABDUL MANAN', 'https://www.billplz-sandbox.com/bills/82b415f28268f059', 'User ID', '1', 'Reference 2', NULL, 'http://localhost/webapps/redirect.php', 'http://localhost/webapps/callback.php', 'PAYMENT DESCRIPTION', '2025-08-14 19:26:57');
 
 -- --------------------------------------------------------
 
@@ -461,7 +517,7 @@ CREATE TABLE `user_employment` (
 --
 
 INSERT INTO `user_employment` (`id`, `user_id`, `employment`, `position`, `employer_name`, `company_address`, `updated_at`) VALUES
-(1, 1, '', '', '', '', '2025-08-08 22:26:19'),
+(1, 1, 'Public', 'asdasd', 'asdasda', 'asdasd', '2025-08-13 23:18:14'),
 (2, 9, '', '', '', '', '2025-08-13 07:47:45'),
 (3, 27, '', '', '', '', '2025-08-07 14:45:53'),
 (4, 28, '', '', '', '', '2025-08-08 13:44:38');
@@ -498,10 +554,10 @@ CREATE TABLE `user_profiles` (
 --
 
 INSERT INTO `user_profiles` (`id`, `user_id`, `full_name`, `gender`, `ethnic`, `phone`, `birthday`, `address1`, `address2`, `area`, `postal_code`, `city`, `state`, `voting_area`, `service_area`, `vest_size`, `profile_pic_url`, `updated_at`) VALUES
-(1, 1, 'MOHD MAZLAN', 'm', NULL, '', '2025-07-31', '', '', '', '', '', 'Sabah', NULL, NULL, NULL, 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-08-10 08:25:05'),
-(2, 9, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', '', '', NULL, NULL, NULL, NULL, '2025-08-13 21:03:39'),
+(1, 1, 'MOHD MAZLAN BIN ABDUL MANAN', 'm', 'Irranun', '010123123123', '2025-08-29', 'AWDAWF', '', '', '', '', NULL, 'N70', 'N70', 'XXXL', 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-08-13 23:16:41'),
+(2, 9, 'mohd mazlan bin abdul manan', 'm', '', '0107896572', NULL, 'SEPANGGAR\r\nseri maju', '', '', '', '', NULL, '', '', '', NULL, '2025-08-14 07:32:48'),
 (3, 27, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-07 14:45:53'),
-(4, 28, 'MOHD MAZLAN', 'm', '', '', NULL, 'ASD', 'ASD', '', '123', '', '', NULL, NULL, NULL, NULL, '2025-08-08 22:24:11');
+(4, 28, 'MOHD MAZLAN', 'm', '', '', NULL, 'ASD\r\nASD', '', '', '', '', NULL, '', '', '', NULL, '2025-08-14 06:33:08');
 
 -- --------------------------------------------------------
 
@@ -529,6 +585,13 @@ INSERT INTO `videos` (`id`, `content_id`, `uploaded_src`, `uploaded_description`
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `account_deletion_requests`
+--
+ALTER TABLE `account_deletion_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `admins`
@@ -559,6 +622,13 @@ ALTER TABLE `articles`
 ALTER TABLE `auth_tokens`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `token` (`token`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `billplz_payment`
+--
+ALTER TABLE `billplz_payment`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -655,6 +725,12 @@ ALTER TABLE `videos`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `account_deletion_requests`
+--
+ALTER TABLE `account_deletion_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `admins`
@@ -757,6 +833,12 @@ ALTER TABLE `videos`
 --
 
 --
+-- Constraints for table `account_deletion_requests`
+--
+ALTER TABLE `account_deletion_requests`
+  ADD CONSTRAINT `account_deletion_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `admin_tokens`
 --
 ALTER TABLE `admin_tokens`
@@ -773,6 +855,12 @@ ALTER TABLE `articles`
 --
 ALTER TABLE `auth_tokens`
   ADD CONSTRAINT `fk_user_tokens_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `billplz_payment`
+--
+ALTER TABLE `billplz_payment`
+  ADD CONSTRAINT `billplz_payment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `comments`

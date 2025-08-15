@@ -184,6 +184,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
 
+        case 'request_account_deletion':
+            $reason = htmlspecialchars(strip_tags($_POST['reason'] ?? ''));
+            if (empty($reason)) {
+                $response['message'] = 'Reason is required.';
+                break;
+            }
+            // Insert request into account_deletion_requests table
+            $stmt = $db->prepare("INSERT INTO account_deletion_requests (user_id, reason, requested_at) VALUES (:user_id, :reason, NOW())");
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':reason', $reason);
+            if ($stmt->execute()) {
+                $response = ['status' => 'success', 'message' => 'Your account deletion request has been submitted. Admin will review your request.'];
+            } else {
+                $response['message'] = 'Failed to submit deletion request.';
+            }
+            break;
         default:
             http_response_code(400);
             $response['message'] = 'Invalid action specified.';

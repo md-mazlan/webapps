@@ -161,40 +161,39 @@ if (typeof personalDetailsForm === 'undefined') {
     });
 
     // --- Delete Account Modal Handling ---
-    deleteAccountBtn.addEventListener('click', () => {
+    // Modal open/close logic
+    deleteAccountBtn.addEventListener('click', function () {
         deleteModal.style.display = 'flex';
     });
-    cancelDeleteBtn.addEventListener('click', () => {
+    cancelDeleteBtn.addEventListener('click', function () {
         deleteModal.style.display = 'none';
     });
-    deleteModal.addEventListener('click', (e) => {
+    deleteModal.addEventListener('click', function (e) {
         if (e.target === deleteModal) {
             deleteModal.style.display = 'none';
         }
     });
 
+    // Handle deletion request form
     deleteAccountForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        const password = document.getElementById('delete-password').value;
+        const reason = document.getElementById('delete-reason').value;
         const deleteBtn = this.querySelector('button[type="submit"]');
         deleteBtn.disabled = true;
-        deleteBtn.textContent = 'Deleting...';
+        deleteBtn.textContent = 'Submitting...';
 
         try {
-            const response = await fetch(USER_API_ENDPOINT, {
+            const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    action: 'delete_account',
-                    password: password
+                body: new URLSearchParams({
+                    action: 'request_account_deletion',
+                    reason: reason
                 })
             });
             const result = await response.json();
             if (result.status === 'success') {
-                alert('Account deleted successfully. You will now be logged out.');
-                window.location.href = '<?php echo BASE_URL; ?>/index.php';
+                showMessage('Your deletion request has been submitted to the admin.', 'success');
+                deleteModal.style.display = 'none';
             } else {
                 showMessage(result.message, 'error');
             }
@@ -202,7 +201,7 @@ if (typeof personalDetailsForm === 'undefined') {
             showMessage('An unexpected error occurred.', 'error');
         } finally {
             deleteBtn.disabled = false;
-            deleteBtn.textContent = 'Delete Account';
+            deleteBtn.textContent = 'Submit Request';
         }
     });
 

@@ -10,7 +10,7 @@ require_once '../php/config.php';
 // if (!isAdminLoggedIn()) { header('Location: ' . BASE_URL . '/admin/login.php'); exit; }
 
 require_once ROOT_PATH . '/php/database.php';
-require_once ROOT_PATH . '/app/models/StateManager.php';
+require_once ROOT_PATH . '/app/controllers/StateController.php';
 require_once ROOT_PATH . '/app/models/State.php';
 
 // 2. INITIALIZATION: Connect to the database and instantiate the manager.
@@ -21,7 +21,7 @@ if (!$db) {
     die("Database connection failed. Please check your configuration.");
 }
 
-$stateManager = new StateManager($db);
+$stateManager = new StateController($db);
 
 $message = '';
 $error = '';

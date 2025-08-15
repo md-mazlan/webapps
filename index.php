@@ -94,7 +94,7 @@ $profileData = $user->getProfile($user_id);
         <div class="sidebar-profile">
             <img src="<?php echo htmlspecialchars($_SESSION['profile_pic_url'] ?? 'https://placehold.co/32x32/e0e7ff/3730a3?text=U'); ?>" alt="Profile Picture" class="sidebar-profile-img" />
             <div class="sidebar-profile-name"><?php echo htmlspecialchars($profileData['full_name'] ?? ''); ?></div>
-            <div class="sidebar-profile-email"><?php echo htmlspecialchars("SKUAD".($profileData['id'] ?? '00')); ?></div>
+            <div class="sidebar-profile-email"><?php echo htmlspecialchars($profileData['skuad_id'] ?? ''); ?></div>
         </div>
         <div id="main-nav" class="sidebar-menu">
             <a href="dashboard" class="menu-item nav-link"> <i class="fa fa-home"></i> <?php echo $lang['dashboard']; ?></a>
@@ -109,7 +109,7 @@ $profileData = $user->getProfile($user_id);
                     <a href="profile_update" class="menu-item nav-link" data-section="am-roles"><?php echo $lang['update'] ?></a>
                 </div>
             </label>
-            <a href="payment_history" class="menu-item nav-link"> <i class="fa fa-inbox"></i> Inbox</a>
+            <a href="inbox" class="menu-item nav-link"> <i class="fa fa-inbox"></i> Inbox</a>
             <a href="payment_history" class="menu-item nav-link"> <i class="fa fa-money"></i> <?php echo $lang['payment_history'] ?></a>
         </div>
 
