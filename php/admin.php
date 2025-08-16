@@ -8,6 +8,22 @@
  */
 class Admin
 {
+    // --- Admin Approval Methods ---
+    public function getInactiveAdmins()
+    {
+        $query = "SELECT id, username, email, created_at FROM " . $this->table_name . " WHERE active = 0 ORDER BY created_at ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function activateAdmin($adminId)
+    {
+        $query = "UPDATE " . $this->table_name . " SET active = 1 WHERE id = :admin_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':admin_id', $adminId, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
     private $conn;
     // Table names
     private $table_name = 'admins';
@@ -38,7 +54,8 @@ class Admin
             return false;
         }
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
-        $query = "INSERT INTO " . $this->table_name . " (username, email, password) VALUES (:username, :email, :password)";
+        // Set active to 0 (inactive) by default
+        $query = "INSERT INTO " . $this->table_name . " (username, email, password, active) VALUES (:username, :email, :password, 0)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':email', $this->email);
@@ -48,13 +65,14 @@ class Admin
     public function login()
     {
         $this->username = htmlspecialchars(strip_tags($this->username));
-        $query = "SELECT id, username, password FROM " . $this->table_name . " WHERE username = :username LIMIT 0,1";
+        // Only allow login if active = 1
+        $query = "SELECT id, username, password, active FROM " . $this->table_name . " WHERE username = :username LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':username', $this->username);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (password_verify($this->password, $row['password'])) {
+            if ($row['active'] == 1 && password_verify($this->password, $row['password'])) {
                 $this->id = $row['id'];
                 $this->username = $row['username'];
                 return true;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2025 at 01:56 PM
+-- Generation Time: Aug 16, 2025 at 01:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,6 +50,7 @@ CREATE TABLE `admins` (
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -57,8 +58,9 @@ CREATE TABLE `admins` (
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `username`, `email`, `password`, `created_at`) VALUES
-(1, 'mazlan', 'mazlan97@live.com', '$2y$10$E7LpEGMOcba67PMxYq5WQuC9wdzgspNxO.cxh8UxtMXAFMMPJE/SS', '2025-07-22 10:10:22');
+INSERT INTO `admins` (`id`, `username`, `email`, `password`, `active`, `created_at`) VALUES
+(1, 'mazlan', 'mazlan97@live.com', '$2y$10$E7LpEGMOcba67PMxYq5WQuC9wdzgspNxO.cxh8UxtMXAFMMPJE/SS', 1, '2025-07-22 10:10:22'),
+(2, 'admin', 'admin@dot.com', '$2y$10$7GKhxwUPDgjeFGs4sdRNx.oWU.6OinxQS9.Q/W9pXVMq9/8OhsFjK', 1, '2025-08-16 18:41:04');
 
 -- --------------------------------------------------------
 
@@ -157,6 +159,7 @@ CREATE TABLE `billplz_payment` (
 --
 
 INSERT INTO `billplz_payment` (`id`, `user_id`, `collection_id`, `paid`, `state`, `amount`, `paid_amount`, `due_at`, `email`, `mobile`, `name`, `url`, `reference_1_label`, `reference_1`, `reference_2_label`, `reference_2`, `redirect_url`, `callback_url`, `description`, `paid_at`) VALUES
+('08d339b032b801fd', 1, 'u121pgx5', 0, 'due', 100, 0, '2025-08-14', 'mazlan97@live.com', NULL, 'MOHD MAZLAN BIN ABDUL MANAN', 'https://www.billplz-sandbox.com/bills/08d339b032b801fd', 'User ID', '1', 'Reference 2', NULL, 'http://localhost/webapps/redirect.php', 'http://localhost/webapps/callback.php', 'PAYMENT DESCRIPTION', '2025-08-14 14:14:18'),
 ('2674cbffa93c327a', 9, 'u121pgx5', 1, 'paid', 100, 100, '2025-08-14', 'mazlan3@live.com', '+60107896572', 'MOHD MAZLAN BIN ABDUL MANAN', 'https://www.billplz-sandbox.com/bills/2674cbffa93c327a', 'Reference 1', NULL, 'Reference 2', NULL, 'http://192.168.0.133/webapps/redirect.php', 'http://192.168.0.133/webapps/callback.php', 'PAYMENT DESCRIPTION', '2025-08-14 15:51:02'),
 ('40d06663f17ccbeb', 9, 'u121pgx5', 1, 'paid', 100, 100, '2025-08-14', 'mazlan3@live.com', '+60107896572', 'MOHD MAZLAN BIN ABDUL MANAN', 'https://www.billplz-sandbox.com/bills/40d06663f17ccbeb', 'Reference 1', NULL, 'Reference 2', NULL, 'http://192.168.0.133/webapps/redirect.php', 'http://192.168.0.133/webapps/callback.php', 'PAYMENT DESCRIPTION', '2025-08-14 15:45:26'),
 ('82b415f28268f059', 1, 'u121pgx5', 1, 'paid', 100, 100, '2025-08-14', 'mazlan97@live.com', NULL, 'MOHD MAZLAN BIN ABDUL MANAN', 'https://www.billplz-sandbox.com/bills/82b415f28268f059', 'User ID', '1', 'Reference 2', NULL, 'http://localhost/webapps/redirect.php', 'http://localhost/webapps/callback.php', 'PAYMENT DESCRIPTION', '2025-08-14 19:26:57');
@@ -202,7 +205,7 @@ CREATE TABLE `content` (
 INSERT INTO `content` (`id`, `content_type`, `title`, `created_at`) VALUES
 (1, 'event', 'Pelancaran', '2025-07-22 01:19:34'),
 (2, 'article', 'title ', '2025-07-22 01:19:56'),
-(5, 'gallery', 'Pelancaran', '2025-07-22 01:27:23'),
+(5, 'gallery', 'Galeri', '2025-07-22 01:27:23'),
 (6, 'video', 'title ', '2025-07-22 01:32:27'),
 (7, 'event', 'Astro Comet', '2025-07-22 03:05:32'),
 (8, 'video', 'LAGU', '2025-07-22 03:19:09'),
@@ -276,6 +279,31 @@ INSERT INTO `gallery_images` (`id`, `gallery_id`, `image_src`, `title`, `sort_or
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `inbox`
+--
+
+CREATE TABLE `inbox` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `sender` varchar(100) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `is_read` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `inbox`
+--
+
+INSERT INTO `inbox` (`id`, `user_id`, `sender`, `subject`, `message`, `is_read`, `created_at`) VALUES
+(1, 1, 'System', 'Welcome!', 'Welcome to your inbox. This is a dummy message.', 0, '2025-08-16 12:29:51'),
+(2, 1, 'Admin', 'Test Message', 'This is a test message for user 1.', 1, '2025-08-15 12:29:51'),
+(3, 1, 'Support', 'Need Help?', 'Contact us anytime for support.', 0, '2025-08-14 12:29:51');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `likes`
 --
 
@@ -294,6 +322,29 @@ INSERT INTO `likes` (`id`, `user_id`, `content_id`, `created_at`) VALUES
 (2, 1, 8, '2025-07-24 09:11:35'),
 (3, 1, 9, '2025-07-24 09:14:19'),
 (4, 2, 9, '2025-07-24 09:15:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `news`
+--
+
+CREATE TABLE `news` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body` text DEFAULT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
+  `published_at` datetime DEFAULT current_timestamp(),
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `news`
+--
+
+INSERT INTO `news` (`id`, `title`, `body`, `image_url`, `published_at`, `created_at`, `updated_at`) VALUES
+(1, 'News', 'asd asdasd a\r\nwfafawd', 'uploads/news/news_68a02c2e2e64d4.14175028.jpg', '2025-08-16 14:58:00', '2025-08-16 14:58:54', '2025-08-16 15:21:06');
 
 -- --------------------------------------------------------
 
@@ -436,7 +487,8 @@ INSERT INTO `sabah_ethnic_groups` (`id`, `name`, `category`) VALUES
 (32, 'Toraja', 'Non-Indigenous'),
 (33, 'Filipino', 'Non-Indigenous'),
 (34, 'Pakistani', 'Non-Indigenous'),
-(35, 'Arab', 'Non-Indigenous');
+(35, 'Arab', 'Non-Indigenous'),
+(36, 'Kedayan', 'Major');
 
 -- --------------------------------------------------------
 
@@ -494,7 +546,9 @@ INSERT INTO `users` (`id`, `nric`, `email`, `username`, `password`, `created_at`
 (1, '971009126123', 'mazlan97@live.com', 'mazlan', '$2y$10$FViyRRCuK8ZqC5PHAig.Se91YAiA50nXp4QDtlN.kU27bD2al4S5q', '2025-07-24 18:57:44'),
 (9, '971009136123', 'mazlan3@live.com', '', '$2y$10$LKSBOo0J01FEwPbeMZ8PQunCmxCv79Wbd1PvW1w8WsS66Xsh7GSGy', '2025-08-07 22:15:01'),
 (27, '971009146123', 'mazlan4@live.com', 'Mazlan', '$2y$10$EYIF.ulISIjPEpF3enJL2eYADbrzO5S/uOuuHd5sZl.Ui7w3W.s8W', '2025-08-07 22:45:53'),
-(28, '971009156123', 'mazlan5@live.com', 'mazlan', '$2y$10$v60g9Any4BZBYA86U8AO5ODFo1VXvHsaDRhNd0CD.cit4n9DcAGd.', '2025-08-07 23:18:01');
+(28, '971009156123', 'mazlan5@live.com', 'mazlan', '$2y$10$v60g9Any4BZBYA86U8AO5ODFo1VXvHsaDRhNd0CD.cit4n9DcAGd.', '2025-08-07 23:18:01'),
+(29, '870314145261', 'syarezanzbnghsb@gmail.com', 'SYAREZAN SAMAT', '$2y$10$.SVmueZc5DSqeeGiCNmO4OpY5ZJHPHtSj5pEAnvPl10RcTEuCjaLO', '2025-08-14 21:24:31'),
+(30, '870513145440', 'angkatanbersatusabah@gmail.com', 'WAN NURUL AIMI', '$2y$10$qLS/fVo2GUOA/8ij/Jz7D.JJBcUeUEysgakOAdFGBQturjLQjHedu', '2025-08-14 21:53:29');
 
 -- --------------------------------------------------------
 
@@ -520,7 +574,9 @@ INSERT INTO `user_employment` (`id`, `user_id`, `employment`, `position`, `emplo
 (1, 1, 'Public', 'asdasd', 'asdasda', 'asdasd', '2025-08-13 23:18:14'),
 (2, 9, '', '', '', '', '2025-08-13 07:47:45'),
 (3, 27, '', '', '', '', '2025-08-07 14:45:53'),
-(4, 28, '', '', '', '', '2025-08-08 13:44:38');
+(4, 28, '', '', '', '', '2025-08-08 13:44:38'),
+(5, 29, 'Private', 'CSO', 'ZBN SDN BHD', 'Lot No R-10-03A, Block B, Level Tenth, Riverson Suites, 88100, Kota Kinabalu, Sabah.', '2025-08-14 20:26:30'),
+(6, 30, 'Public', 'PEGAWAI TADBIR', 'JABATAN AKAUNTAN NEGERI SABAH', '', '2025-08-14 20:56:47');
 
 -- --------------------------------------------------------
 
@@ -557,7 +613,35 @@ INSERT INTO `user_profiles` (`id`, `user_id`, `full_name`, `gender`, `ethnic`, `
 (1, 1, 'MOHD MAZLAN BIN ABDUL MANAN', 'm', 'Irranun', '010123123123', '2025-08-29', 'AWDAWF', '', '', '', '', NULL, 'N70', 'N70', 'XXXL', 'uploads/profiles/225ae1c17519d7fa3fc2326ef683902e.jpg', '2025-08-13 23:16:41'),
 (2, 9, 'mohd mazlan bin abdul manan', 'm', '', '0107896572', NULL, 'SEPANGGAR\r\nseri maju', '', '', '', '', NULL, '', '', '', NULL, '2025-08-14 07:32:48'),
 (3, 27, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-07 14:45:53'),
-(4, 28, 'MOHD MAZLAN', 'm', '', '', NULL, 'ASD\r\nASD', '', '', '', '', NULL, '', '', '', NULL, '2025-08-14 06:33:08');
+(4, 28, 'MOHD MAZLAN', 'm', '', '', NULL, 'ASD\r\nASD', '', '', '', '', NULL, '', '', '', NULL, '2025-08-14 06:33:08'),
+(5, 29, 'MOHD SYAREZAN BIN ABDUL SAMAT', 'm', 'Bajau', '014-6790168', '1987-03-14', '', '', '', '', '', NULL, 'N12', 'N12', 'L', NULL, '2025-08-14 20:25:54'),
+(6, 30, 'WAN NURUL AIMI', 'f', 'Sama-Bajau', '0146790168', '1987-05-13', 'Kota kinabalu', '', '', '', '', NULL, 'N12', 'N21', 'M', NULL, '2025-08-14 20:56:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendor`
+--
+
+CREATE TABLE `vendor` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `location` varchar(100) DEFAULT NULL,
+  `discount` text DEFAULT NULL,
+  `offering` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `vendor`
+--
+
+INSERT INTO `vendor` (`id`, `name`, `location`, `discount`, `offering`, `created_at`) VALUES
+(1, 'FreshMart', 'Kota Kinabalu, Sabah', '10% off', 'Fresh fruits and vegetables', '2025-08-16 16:20:40'),
+(2, 'Techie Gadgets', 'Sandakan, Sabah', 'RM50 voucher', 'Latest electronics and gadgets', '2025-08-15 16:20:40'),
+(3, 'Batik Boutique', 'Tawau, Sabah', '15% off', 'Handmade batik clothing', '2025-08-14 16:20:40'),
+(4, 'Coffee Corner', 'Lahad Datu, Sabah', 'Buy 1 Free 1', 'Specialty coffee and pastries', '2025-08-13 16:20:40'),
+(5, 'Book Haven', 'Keningau, Sabah', '20% off', 'Books and stationery', '2025-08-12 16:20:40');
 
 -- --------------------------------------------------------
 
@@ -579,8 +663,8 @@ CREATE TABLE `videos` (
 --
 
 INSERT INTO `videos` (`id`, `content_id`, `uploaded_src`, `uploaded_description`, `embedded_src`, `embedded_description`) VALUES
-(1, 6, NULL, '', 'https://www.youtube.com/embed/m-q_Bd4K_H0?list=RDm-q_Bd4K_H0', ''),
-(2, 8, '', '', 'https://www.youtube.com/embed/m-q_Bd4K_H0?list=RDm-q_Bd4K_H0', 'asd');
+(1, 6, NULL, '', 'https://www.youtube.com/embed/ruEJCHrh9a0?si=Kn6NdfiFyOnkEipU', ''),
+(2, 8, '', '', 'https://www.youtube.com/embed/m-q_Bd4K_H0?list=RDm-q_Bd4K_H0https://www.youtube.com/embed/ruEJCHrh9a0?si=Kn6NdfiFyOnkEipUhttps://www.youtube.com/embed/QYGdLMf9hzM?si=448_68iyB2fxNHRA', 'asd');
 
 --
 -- Indexes for dumped tables
@@ -667,12 +751,25 @@ ALTER TABLE `gallery_images`
   ADD KEY `gallery_id` (`gallery_id`);
 
 --
+-- Indexes for table `inbox`
+--
+ALTER TABLE `inbox`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `likes`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_like` (`user_id`,`content_id`),
   ADD KEY `content_id` (`content_id`);
+
+--
+-- Indexes for table `news`
+--
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `sabah_dun_seats`
@@ -716,6 +813,12 @@ ALTER TABLE `user_profiles`
   ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `vendor`
+--
+ALTER TABLE `vendor`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `videos`
 --
 ALTER TABLE `videos`
@@ -736,13 +839,13 @@ ALTER TABLE `account_deletion_requests`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `admin_tokens`
 --
 ALTER TABLE `admin_tokens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `articles`
@@ -787,16 +890,28 @@ ALTER TABLE `gallery_images`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `inbox`
+--
+ALTER TABLE `inbox`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `news`
+--
+ALTER TABLE `news`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `sabah_ethnic_groups`
 --
 ALTER TABLE `sabah_ethnic_groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -808,19 +923,25 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `user_employment`
 --
 ALTER TABLE `user_employment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_profiles`
 --
 ALTER TABLE `user_profiles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `vendor`
+--
+ALTER TABLE `vendor`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `videos`
@@ -885,6 +1006,12 @@ ALTER TABLE `galleries`
 --
 ALTER TABLE `gallery_images`
   ADD CONSTRAINT `gallery_images_ibfk_1` FOREIGN KEY (`gallery_id`) REFERENCES `galleries` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `inbox`
+--
+ALTER TABLE `inbox`
+  ADD CONSTRAINT `inbox_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `likes`

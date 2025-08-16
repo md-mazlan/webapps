@@ -1,3 +1,4 @@
+
 <?php
 
 // Include the new configuration file first.
@@ -35,7 +36,7 @@ $profileData = $user->getProfile($user_id);
 
 <head>
     <meta charset="UTF-8">
-    <title>Admin</title>
+    <title><?php echo htmlspecialchars($profileData['username'] ?? $profileData['skuad_no']); ?></title>
     <meta id="Viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link
@@ -135,7 +136,17 @@ $profileData = $user->getProfile($user_id);
     </div>
 
     <div id="content" class="bg-white p-6 md:p-8 rounded-lg shadow-md min-h-[300px]">
-        <!-- Dynamic content will be loaded here -->
+        <div id="dashboard-loading" style="display:flex;align-items:center;justify-content:center;height:180px;">
+            <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 1s linear infinite;">
+                <circle cx="27" cy="27" r="22" stroke="#6373ff" stroke-width="6" opacity="0.2"/>
+                <path d="M49 27a22 22 0 1 1-44 0" stroke="#6373ff" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <style>
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        </style>
     </div>
 
 

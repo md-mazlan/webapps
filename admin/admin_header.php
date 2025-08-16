@@ -22,7 +22,9 @@ if (!isAdminLoggedIn()) {
     <div id="toolbar">
         <label class="menu-toggle" for="drawer-toggle">
             <input type="checkbox" id="drawer-toggle" style="display: none;" />
-            <div></div>
+            <span class="menu-icon">
+                <i class="fa fa-bars"></i>
+            </span>
         </label>
         <div id="toolbar-title"><img src="../images/logo-200.png" alt="Logo" style="margin: 10px;" height="30px" /></div>
         <div id="toolbar-actions">
@@ -31,6 +33,7 @@ if (!isAdminLoggedIn()) {
             </a>
         </div>
     </div>
+    <div id="overlay"></div>
 
     <div id="sidebar">
         <div class="sidebar-profile">
@@ -46,6 +49,10 @@ if (!isAdminLoggedIn()) {
                 ['content_dashboard.php', 'fa-pencil-square-o', 'Content'],
                 ['states.php', 'fa-map', 'States'],
                 ['ethnic_groups.php', 'fa-globe', 'Ethnic Groups'],
+                ['vendors.php', 'fa-briefcase', 'Vendors'],
+                ['news.php', 'fa-newspaper-o', 'News'],
+                ['account_deletion_requests.php', 'fa-user-times', 'Account Deletion Requests'],
+                ['approve_admins.php', 'fa-user-plus', 'Approve Admins'],
             ];
             foreach ($nav_items as $item) {
                 $active = ($current_page === $item[0]) ? 'active' : '';
@@ -56,3 +63,4 @@ if (!isAdminLoggedIn()) {
     </div>
 
     <div id="content">
+    <script src="js/script.js"></script>

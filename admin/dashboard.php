@@ -38,6 +38,10 @@ include_once 'admin_header.php';
 </style>
 <div class="dashboard-wrapper">
     <header class="header">
+        <nav>
+            <a href="approve_admins.php" style="color: #2563eb; font-weight: bold; margin-right: 20px;">Approve Admins</a>
+            <!-- ...other nav links... -->
+        </nav>
         <h1>Admin Dashboard</h1>
     </header>
 

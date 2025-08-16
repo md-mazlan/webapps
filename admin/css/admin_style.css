@@ -1,3 +1,138 @@
+/* Sidebar and overlay for mobile */
+#sidebar {
+    transition: left 0.3s, box-shadow 0.3s;
+}
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+#sidebar.open {
+    left: 0 !important;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    z-index: 1100;
+}
+#overlay.active {
+    display: block;
+}
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+.menu-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+@media (max-width: 900px) {
+    .menu-toggle {
+        display: inline-block;
+    }
+    #sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        width: 240px;
+        height: 100vh;
+        background: var(--card-bg-color);
+        box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+        z-index: 1100;
+        transition: left 0.3s;
+    }
+    #sidebar.open {
+        left: 0;
+    }
+    #content {
+        margin-left: 0 !important;
+    }
+}
+/* ============================================= */
+/* == Responsive Design for Admin Panel        == */
+/* ============================================= */
+
+@media (max-width: 1024px) {
+    .dashboard-wrapper {
+        max-width: 98vw;
+        padding: 1rem;
+    }
+    .card {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        padding: 0.5rem;
+    }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .sidebar-profile {
+        text-align: left;
+    }
+    #sidebar {
+        width: 100vw;
+        position: static;
+        min-width: unset;
+        max-width: unset;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+    }
+    #main-nav .menu-item {
+        display: inline-block;
+        margin-right: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    #content {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-wrapper {
+        padding: 0.25rem;
+    }
+    .header h1 {
+        font-size: 1.25rem;
+    }
+    .card-title {
+        font-size: 1rem;
+    }
+    .card {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+    }
+    table {
+        font-size: 0.95rem;
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    th, td {
+        padding: 0.5rem;
+    }
+    .form-group label, .form-control {
+        font-size: 0.95rem;
+    }
+    .btn, .btn-primary, .btn-secondary, .btn-danger {
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
+    }
+}
 /* ============================================= */
 /* == Global Styles & Variables for Admin Panel == */
 /* ============================================= */

@@ -10,10 +10,10 @@ class Database
 {
     // Database credentials
     // IMPORTANT: Replace with your actual database details
-    private $host = 'localhost';
-    private $db_name = 'app'; // The database you created with users.sql
-    private $username = 'root';      // Your database username
-    private $password = '';      // Your database password
+    private $host = 'sql106.infinityfree.com';
+    private $db_name = 'if0_39679185_app'; // The database you created with users.sql
+    private $username = 'if0_39679185';      // Your database username
+    private $password = '971009maz';      // Your database password
     private $conn;
 
     /**

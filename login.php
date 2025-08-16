@@ -1,7 +1,12 @@
 <?php
-
 // Include the new configuration file first.
 require_once 'php/config.php';
+// Also check if an admin is logged in and block access
+require_once 'php/admin_auth_check.php';
+if (isAdminLoggedIn()) {
+    header('Location: ' . BASE_URL . '/admin/dashboard.php');
+    exit;
+}
 
 
 if (isset($_GET['lang'])) {
@@ -16,7 +21,7 @@ require_once ROOT_PATH . '/php/user_auth_check.php';
 
 // If a user is not logged in, redirect them to the login page.
 if (isUserLoggedIn()) {
-    header('Location: ' . BASE_URL . '/index.php');
+    header('Location: ' . BASE_URL . '/');
     exit;
 }
 ?>
@@ -641,7 +646,9 @@ if (isUserLoggedIn()) {
             }
             // Use XMLHttpRequest instead of fetch
             try {
-                console.log({ data: jsonData });
+                console.log({
+                    data: jsonData
+                });
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', REGISTER_ENDPOINT, true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
@@ -652,7 +659,9 @@ if (isUserLoggedIn()) {
                         try {
                             result = JSON.parse(xhr.responseText);
                         } catch (err) {
-                            result = { message: 'Invalid server response.' };
+                            result = {
+                                message: 'Invalid server response.'
+                            };
                         }
                         if (xhr.status === 201) {
                             showMessage('Success! Please sign in.');

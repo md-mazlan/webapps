@@ -2,6 +2,14 @@
 
 // Include the new configuration file first.
 require_once '../php/config.php';
+// Use the centralized user authentication check with an absolute path.
+require_once ROOT_PATH . '/php/user_auth_check.php';
+
+// If a user is not logged in, redirect them to the login page.
+if (!isUserLoggedIn()) {
+    header('Location: ' . BASE_URL . '/login.php');
+    exit;
+}
 
 
 if (isset($_GET['lang'])) {

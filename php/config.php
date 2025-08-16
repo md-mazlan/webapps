@@ -22,6 +22,6 @@ $script_name = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 // If in a subfolder, SCRIPT_NAME will be /subfolder/api, so we need to go up one level.
 // If in the root, it will be /, which is correct.
 $base_path = (strpos($_SERVER['REQUEST_URI'], '/api/') !== false || strpos($_SERVER['REQUEST_URI'], '/admin/') !== false) ? dirname($script_name) : $script_name;
-$base_url = rtrim($protocol . $host . $base_path, '/');
+$base_url = rtrim($protocol . $host, '/');
 
-define('BASE_URL', $base_url);
+define('BASE_URL', $base_url.'/webapps');

@@ -62,7 +62,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_content'])) {
     }
 }
 
-// --- Fetch All Existing Content for Display ---
+
+// --- Content Summary Stats ---
+$total_content = $db->query('SELECT COUNT(*) FROM content')->fetchColumn();
+$total_articles = $db->query("SELECT COUNT(*) FROM content WHERE content_type = 'article'")->fetchColumn();
+$total_events = $db->query("SELECT COUNT(*) FROM content WHERE content_type = 'event'")->fetchColumn();
+$total_galleries = $db->query("SELECT COUNT(*) FROM content WHERE content_type = 'gallery'")->fetchColumn();
+$total_videos = $db->query("SELECT COUNT(*) FROM content WHERE content_type = 'video'")->fetchColumn();
+
 $allContent = $content->getAll();
 
 include_once 'admin_header.php';
@@ -277,6 +284,73 @@ include_once 'admin_header.php';
     }
 </style>
 <div class="dashboard-wrapper">
+    <!-- Content Summary Cards -->
+    <div style="display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+    <!-- Latest Content Section -->
+    <div class="card" style="margin-bottom:2rem;">
+        <h2 class="card-title">Latest Content</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Created On</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $latestContent = $db->query('SELECT title, content_type, created_at FROM content ORDER BY created_at DESC LIMIT 5')->fetchAll(PDO::FETCH_ASSOC);
+                if (empty($latestContent)):
+                ?>
+                    <tr><td colspan="3" style="text-align:center;">No recent content.</td></tr>
+                <?php else:
+                    foreach ($latestContent as $item): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($item['title']); ?></td>
+                            <td><span class="badge badge-<?php echo htmlspecialchars($item['content_type']); ?>"><?php echo htmlspecialchars($item['content_type']); ?></span></td>
+                            <td><?php echo date('F j, Y', strtotime($item['created_at'])); ?></td>
+                        </tr>
+                    <?php endforeach;
+                endif; ?>
+            </tbody>
+        </table>
+    </div>
+        <div style="flex:1; min-width: 180px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 1.2rem; display: flex; align-items: center;">
+            <div style="font-size: 2rem; color: #2563eb; margin-right: 1rem;"><i class="fa fa-file-text"></i></div>
+            <div>
+                <div style="font-size: 1.1rem; font-weight: 600;">Total Content</div>
+                <div style="font-size: 1.6rem; font-weight: bold; color: #222;"> <?php echo $total_content; ?> </div>
+            </div>
+        </div>
+        <div style="flex:1; min-width: 180px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 1.2rem; display: flex; align-items: center;">
+            <div style="font-size: 2rem; color: #1e40af; margin-right: 1rem;"><i class="fa fa-newspaper-o"></i></div>
+            <div>
+                <div style="font-size: 1.1rem; font-weight: 600;">Articles</div>
+                <div style="font-size: 1.6rem; font-weight: bold; color: #222;"> <?php echo $total_articles; ?> </div>
+            </div>
+        </div>
+        <div style="flex:1; min-width: 180px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 1.2rem; display: flex; align-items: center;">
+            <div style="font-size: 2rem; color: #166534; margin-right: 1rem;"><i class="fa fa-calendar"></i></div>
+            <div>
+                <div style="font-size: 1.1rem; font-weight: 600;">Events</div>
+                <div style="font-size: 1.6rem; font-weight: bold; color: #222;"> <?php echo $total_events; ?> </div>
+            </div>
+        </div>
+        <div style="flex:1; min-width: 180px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 1.2rem; display: flex; align-items: center;">
+            <div style="font-size: 2rem; color: #92400e; margin-right: 1rem;"><i class="fa fa-picture-o"></i></div>
+            <div>
+                <div style="font-size: 1.1rem; font-weight: 600;">Galleries</div>
+                <div style="font-size: 1.6rem; font-weight: bold; color: #222;"> <?php echo $total_galleries; ?> </div>
+            </div>
+        </div>
+        <div style="flex:1; min-width: 180px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 1.2rem; display: flex; align-items: center;">
+            <div style="font-size: 2rem; color: #3730a3; margin-right: 1rem;"><i class="fa fa-youtube-play"></i></div>
+            <div>
+                <div style="font-size: 1.1rem; font-weight: 600;">Videos</div>
+                <div style="font-size: 1.6rem; font-weight: bold; color: #222;"> <?php echo $total_videos; ?> </div>
+            </div>
+        </div>
+    </div>
     <?php if ($message): ?>
         <div class="message <?php echo $message_type; ?>"><?php echo htmlspecialchars($message); ?></div>
     <?php endif; ?>

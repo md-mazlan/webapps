@@ -1,5 +1,14 @@
 <?php
 
+// Also check if a normal user is logged in and block access
+require_once 'config.php';
+require_once 'user_auth_check.php';
+
+// If a normal user is logged in, redirect to user dashboard (or homepage)
+if (isUserLoggedIn()) {
+    header('Location: ' . BASE_URL . '/dashboard'); // Adjust path if needed
+    exit;
+}
 /**
  * Checks if an administrator is currently logged in, either through an active
  * session or a valid "Remember Me" token.
